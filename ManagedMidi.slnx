@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/MSBuild/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="ManagedMidi.Tests/ManagedMidi.Tests.csproj" Id="af63471b-278d-46f7-b76d-179336d189f7" />
+  <Project Path="ManagedMidi/ManagedMidi.csproj" Id="4c50241c-4071-45a5-a424-38f2190a137f" />
+</Solution>
