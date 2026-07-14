@@ -15,6 +15,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ManagedMidi\ManagedMidi.csproj" />
+		<ProjectReference Include="..\ManagedMidi\ManagedMidi.csproj" />
 	</ItemGroup>
 </Project>
