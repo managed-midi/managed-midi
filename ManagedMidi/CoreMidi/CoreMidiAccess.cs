@@ -23,7 +23,7 @@ namespace Managed
 
 namespace ManagedMidi.CoreMidi;
 
-public class CoreMidiAccess : IMidiAccess2
+internal class CoreMidiAccess : IMidiAccess2
 {
 	class CoreMidiAccessExtensionManager : MidiAccessExtensionManager
 	{
@@ -90,7 +90,7 @@ public class CoreMidiAccess : IMidiAccess2
 	}
 }
 
-class CoreMidiPortDetails : IMidiPortDetails, IDisposable
+internal class CoreMidiPortDetails : IMidiPortDetails, IDisposable
 {
 	public CoreMidiPortDetails (MidiEndpoint src)
 	{
@@ -122,7 +122,7 @@ class CoreMidiPortDetails : IMidiPortDetails, IDisposable
 	}
 }
 
-class CoreMidiInput : IMidiInput
+internal class CoreMidiInput : IMidiInput
 {
 	public CoreMidiInput (CoreMidiPortDetails details)
 	{
@@ -174,7 +174,7 @@ class CoreMidiInput : IMidiInput
 	}
 }
 
-class CoreMidiOutput : IMidiOutput
+internal class CoreMidiOutput : IMidiOutput
 {
 	public CoreMidiOutput (CoreMidiPortDetails details)
 	{

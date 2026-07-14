@@ -32,7 +32,7 @@ using CFTypeRef = System.IntPtr;
 
 namespace ManagedMidi.CoreMidi;
 
-public static class Midi
+internal static class Midi
 {
     public static nint DeviceCount => CoreMidiInterop.MIDIGetNumberOfDevices();
 
@@ -48,7 +48,7 @@ public static class Midi
     }
 }
 
-public class MidiException : Exception
+internal class MidiException : Exception
 {
     public MidiException()
         : this("MIDI error")
@@ -71,7 +71,7 @@ public class MidiException : Exception
     }
 }
 
-public enum MidiError
+internal enum MidiError
 {
     Ok = 0,
     InvalidClient = -10830,
@@ -91,7 +91,7 @@ public enum MidiError
     NotPermitted = -10844
 }
 
-public class MidiDevice
+internal class MidiDevice
 {
     public MidiDevice(MIDIDeviceRef device)
     {
@@ -108,7 +108,7 @@ public class MidiDevice
     }
 }
 
-public class MidiEntity
+internal class MidiEntity
 {
     public MidiEntity(MIDIEntityRef entity)
     {
@@ -122,7 +122,7 @@ public class MidiEntity
     public nint Destinations => CoreMidiInterop.MIDIEntityGetNumberOfDestinations(entity);
 }
 
-public class MidiEndpoint : IDisposable
+internal class MidiEndpoint : IDisposable
 {
 
     public static MidiEndpoint GetSource(nint s)
@@ -228,7 +228,7 @@ public class MidiEndpoint : IDisposable
     }
 }
 
-public class MidiPort : IDisposable
+internal class MidiPort : IDisposable
 {
     public MidiPort(MIDIPortRef port, bool shouldDispose, ReadDispatcher dispatcher)
     {
@@ -302,7 +302,7 @@ public class MidiPort : IDisposable
     }
 }
 
-public class MidiPacket
+internal class MidiPacket
 {
     public MidiPacket(long timestamp, ushort length, IntPtr bytes)
     {
@@ -317,7 +317,7 @@ public class MidiPacket
     public long TimeStamp { get; internal set; }
 }
 
-public class ReadDispatcher : IDisposable
+internal class ReadDispatcher : IDisposable
 {
     private static List<CoreMidiInterop.MIDIReadProc> read_procs = new List<CoreMidiInterop.MIDIReadProc>();
 
@@ -344,7 +344,7 @@ public class ReadDispatcher : IDisposable
     }
 }
 
-public class MidiClient : IDisposable
+internal class MidiClient : IDisposable
 {
     public MidiClient(string name)
     {
@@ -401,7 +401,7 @@ public class MidiClient : IDisposable
     }
 }
 
-public class MidiPacketsEventArgs : EventArgs
+internal class MidiPacketsEventArgs : EventArgs
 {
     public MidiPacket[] Packets { get; internal set; }
 }
