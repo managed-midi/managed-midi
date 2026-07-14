@@ -1,50 +1,40 @@
 on: [push, pull_request]
-name: Continuous Integration
+name: Continuous Integration Build and Test
 
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
     timeout-minutes: 60
+    strategy:
+      # Failure in one platform build won't impact the others
+      fail-fast: false
+      matrix:
+        build:
+          - name: 'Linux'
+            platform:  'linux/amd64'
+            os: 'ubuntu-latest'
+          - name: 'Windows'
+            platform:  'windows/amd64'
+            os: 'windows-latest'
+          - name: 'MacOS'
+            platform:  'darwin/universal'
+            os: 'macos-latest'
+
+    runs-on: ${{ matrix.build.os }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          submodules: recursive
+        uses: actions/checkout@v7
 
-      - name: Retrieve Commit Hash
-        id: commit-hash
-        shell: bash
-        run: echo "short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v3
-  
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v3
-  
       - name: Install .NET 10.0
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
-      - name: Install .NET iOS Workload
-        run: dotnet workload install ios
-
-      - name: Build .NET Core Projects
-        run: dotnet build managed-midi.Core.slnf
-
-      - name: Build .NET Framework Projects
-        run: msbuild managed-midi.Windows.slnf -restore -p:RestorePackagesConfig=true
-
-      - name: Build Xamarin Projects
-        run: msbuild managed-midi.Xamarin.slnf -restore -p:AndroidSdkDirectory="$env:ANDROID_HOME" -p:JavaSdkDirectory="$env:JAVA_HOME_11_X64"
+      - name: Build
+        run: |
+          dotnet build ManagedMidi.slnx
+          dotnet test ManagedMidi.slnx
 
       - name: Pack 
-        run: nuget pack -Version 1.0-${{ steps.commit-hash.outputs.short }}
-        
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          path: ./*.nupkg
+        run: nuget pack ManagedMidi.slnx
