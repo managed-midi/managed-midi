@@ -1,10 +1,3 @@
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using NUnit.Framework;
-
 namespace ManagedMidi.Tests;
 
 [TestFixture]
@@ -63,19 +56,19 @@ public class SMFTest
     // 
     // It is likely related to manifest resource tetrieval.
     [Test]
-    public void GetTimePositionInMillisecondsForTick()
+    public async Task GetTimePositionInMillisecondsForTick()
     {
         var vt = new VirtualMidiPlayerTimeManager();
         var player = TestHelper.GetMidiPlayer(vt);
         player.Play();
         vt.ProceedBy(100);
         player.Seek(5000);
-        Task.Delay(200);
+        await Task.Delay(200);
         Assert.AreEqual(5000, player.PlayDeltaTime, "1 PlayDeltaTime");
         Assert.AreEqual(12, (int) player.PositionInTime.TotalSeconds, "1 PositionInTime");
         vt.ProceedBy(100);
         // FIXME: this is ugly.
-        Task.Delay(100);
+        await Task.Delay(100);
         // FIXME: not working
         //Assert.AreEqual (5100, player.PlayDeltaTime, "2 PlayDeltaTime");
         Assert.AreEqual(12, (int) player.PositionInTime.TotalSeconds, "2 PositionInTime");
@@ -84,7 +77,7 @@ public class SMFTest
         Assert.AreEqual(5, (int) player.PositionInTime.TotalSeconds, "3 PositionInTime");
         vt.ProceedBy(100);
         // FIXME: this is ugly.
-        Task.Delay(100);
+        await Task.Delay(100);
         // FIXME: not working
         //Assert.AreEqual (2100, player.PlayDeltaTime, "4 PlayDeltaTime");
         Assert.AreEqual(5, (int) player.PositionInTime.TotalSeconds, "4 PositionInTime");
