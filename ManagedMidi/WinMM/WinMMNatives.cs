@@ -5,7 +5,7 @@ using System.Text;
 namespace ManagedMidi.WinMM;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-struct MidiInCaps
+internal struct MidiInCaps
 {
     public short Mid;
     public short Pid;
@@ -16,7 +16,7 @@ struct MidiInCaps
 }
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-struct MidiOutCaps
+internal struct MidiOutCaps
 {
     public short Mid;
     public short Pid;
@@ -31,7 +31,7 @@ struct MidiOutCaps
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-struct MidiHdr
+internal struct MidiHdr
 {
     public IntPtr Data;
     public int BufferLength; // should be uint
@@ -46,7 +46,7 @@ struct MidiHdr
 }
 
 [Flags]
-public enum MidiInOpenFlags
+internal enum MidiInOpenFlags
 {
     Null = 0,
     Window = 0x10000,
@@ -56,7 +56,7 @@ public enum MidiInOpenFlags
 }
 
 [Flags]
-public enum MidiOutOpenFlags
+internal enum MidiOutOpenFlags
 {
     Null,
     Function,
@@ -65,7 +65,7 @@ public enum MidiOutOpenFlags
     Event,
 }
 
-public enum MidiInMessage : uint
+internal enum MidiInMessage : uint
 {
     Open = 0x3C1,
     Close = 0x3C2,
@@ -76,10 +76,10 @@ public enum MidiInMessage : uint
     MoreData = 0x3CC
 }
 
-public delegate void MidiInProc(IntPtr midiIn, MidiInMessage msg, IntPtr instance, IntPtr param1, IntPtr param2);
-public delegate void MidiOutProc(IntPtr midiOut, uint msg, IntPtr instance, IntPtr param1, IntPtr param2);
+internal delegate void MidiInProc(IntPtr midiIn, MidiInMessage msg, IntPtr instance, IntPtr param1, IntPtr param2);
+internal delegate void MidiOutProc(IntPtr midiOut, uint msg, IntPtr instance, IntPtr param1, IntPtr param2);
 
-public static class WinMMNatives
+internal static class WinMMNatives
 {
     public const string LibraryName = "winmm";
     public const int MaxPNameLen = 32;

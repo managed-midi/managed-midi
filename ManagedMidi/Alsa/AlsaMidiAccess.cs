@@ -7,10 +7,9 @@ using ManagedMidi.AlsaSharp;
 
 namespace ManagedMidi.Alsa;
 
-public class AlsaMidiAccess : IMidiAccess2
+internal class AlsaMidiAccess : IMidiAccess2
 {
-
-    class AlsaMidiAccessExtensionManager : MidiAccessExtensionManager
+    internal class AlsaMidiAccessExtensionManager : MidiAccessExtensionManager
     {
         AlsaMidiPortCreatorExtension port_creator;
 
@@ -30,7 +29,7 @@ public class AlsaMidiAccess : IMidiAccess2
         }
     }
 
-    class AlsaMidiPortCreatorExtension : MidiPortCreatorExtension
+    internal class AlsaMidiPortCreatorExtension : MidiPortCreatorExtension
     {
         AlsaMidiAccessExtensionManager manager;
 
@@ -164,7 +163,7 @@ public class AlsaMidiAccess : IMidiAccess2
 }
 
 [Obsolete("It will vanish from public API surface")]
-public class AlsaMidiPortDetails : IMidiPortDetails
+internal class AlsaMidiPortDetails : IMidiPortDetails
 {
     AlsaPortInfo port;
 
@@ -185,7 +184,7 @@ public class AlsaMidiPortDetails : IMidiPortDetails
 }
 
 [Obsolete("It will vanish from public API surface")]
-public class AlsaMidiInput : IMidiInput
+internal class AlsaMidiInput : IMidiInput
 {
     AlsaSequencer seq;
     AlsaMidiPortDetails port, source_port;
@@ -228,7 +227,7 @@ public class AlsaMidiInput : IMidiInput
 }
 
 [Obsolete("It will vanish from public API surface")]
-public class AlsaMidiOutput : IMidiOutput
+internal class AlsaMidiOutput : IMidiOutput
 {
     AlsaSequencer seq;
     AlsaMidiPortDetails port, target_port;

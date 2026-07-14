@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ManagedMidi.WinMM;
 
-public class WinMMMidiAccess : IMidiAccess
+internal class WinMMMidiAccess : IMidiAccess
 {
     public IEnumerable<IMidiPortDetails> Inputs
     {

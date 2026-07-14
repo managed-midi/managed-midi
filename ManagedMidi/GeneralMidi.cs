@@ -2,7 +2,8 @@
 
 namespace ManagedMidi;
 
-public class GeneralMidi
+// TODO: Possibly remove? This doesn't seem to be needed.
+internal class GeneralMidi
 {
     public static readonly string[] InstrumentNames = {
         "Acoustic Piano",
