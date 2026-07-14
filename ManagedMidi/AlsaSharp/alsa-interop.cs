@@ -31,21 +31,21 @@ using delegate14 = ManagedMidi.AlsaSharp.Delegates.delegate14;
 namespace ManagedMidi.AlsaSharp;
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timestamp_t // hack_time.h (6, 8)
+internal struct snd_timestamp_t // hack_time.h (6, 8)
 {
     public long @tv_sec;
     public long @tv_usec;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_htimestamp_t // hack_time.h (11, 8)
+internal struct snd_htimestamp_t // hack_time.h (11, 8)
 {
     public long @tv_sec;
     public long @tv_nsec;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_dlsym_link // global.h (66, 8)
+internal struct snd_dlsym_link // global.h (66, 8)
 {
     [CTypeDetails("Pointer<snd_dlsym_link>")] public System.IntPtr @next;
     [CTypeDetails("Pointer<byte>")] public System.IntPtr @dlsym_name;
@@ -53,38 +53,38 @@ struct snd_dlsym_link // global.h (66, 8)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_async_handler_t // global.h (114, 16)
+internal struct snd_async_handler_t // global.h (114, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_shm_area // global.h (130, 8)
+internal struct snd_shm_area // global.h (130, 8)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_input_t // input.h (54, 16)
+internal struct snd_input_t // input.h (54, 16)
 {
 }
 
-enum snd_input_type_t // input.h (57, 14)
+internal enum snd_input_type_t // input.h (57, 14)
 {
     SND_INPUT_STDIO = 0,
     SND_INPUT_BUFFER = 1,
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_output_t // output.h (54, 16)
+internal struct snd_output_t // output.h (54, 16)
 {
 }
 
-enum snd_output_type_t // output.h (57, 14)
+internal enum snd_output_type_t // output.h (57, 14)
 {
     SND_OUTPUT_STDIO = 0,
     SND_OUTPUT_BUFFER = 1,
 }
 
-enum snd_config_type_t // conf.h (48, 14)
+internal enum snd_config_type_t // conf.h (48, 14)
 {
     SND_CONFIG_TYPE_INTEGER = 0,
     SND_CONFIG_TYPE_INTEGER64 = 1,
@@ -95,22 +95,22 @@ enum snd_config_type_t // conf.h (48, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_config_t // conf.h (69, 16)
+internal struct snd_config_t // conf.h (69, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct _snd_config_iterator // conf.h (77, 16)
+internal struct _snd_config_iterator // conf.h (77, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_config_update_t // conf.h (83, 16)
+internal struct snd_config_update_t // conf.h (83, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_devname_t // conf.h (197, 8)
+internal struct snd_devname_t // conf.h (197, 8)
 {
     [CTypeDetails("Pointer<byte>")] public System.IntPtr @name;
     [CTypeDetails("Pointer<byte>")] public System.IntPtr @comment;
@@ -118,41 +118,41 @@ struct snd_devname_t // conf.h (197, 8)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_info_t // pcm.h (46, 16)
+internal struct snd_pcm_info_t // pcm.h (46, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_hw_params_t // pcm.h (62, 16)
+internal struct snd_pcm_hw_params_t // pcm.h (62, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_sw_params_t // pcm.h (65, 16)
+internal struct snd_pcm_sw_params_t // pcm.h (65, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_status_t // pcm.h (67, 17)
+internal struct snd_pcm_status_t // pcm.h (67, 17)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_access_mask_t // pcm.h (69, 16)
+internal struct snd_pcm_access_mask_t // pcm.h (69, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_format_mask_t // pcm.h (71, 16)
+internal struct snd_pcm_format_mask_t // pcm.h (71, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_subformat_mask_t // pcm.h (73, 16)
+internal struct snd_pcm_subformat_mask_t // pcm.h (73, 16)
 {
 }
 
-enum snd_pcm_class_t // pcm.h (76, 14)
+internal enum snd_pcm_class_t // pcm.h (76, 14)
 {
     SND_PCM_CLASS_GENERIC = 0,
     SND_PCM_CLASS_MULTI = 1,
@@ -161,21 +161,21 @@ enum snd_pcm_class_t // pcm.h (76, 14)
     SND_PCM_CLASS_LAST = 3,
 }
 
-enum snd_pcm_subclass_t // pcm.h (90, 14)
+internal enum snd_pcm_subclass_t // pcm.h (90, 14)
 {
     SND_PCM_SUBCLASS_GENERIC_MIX = 0,
     SND_PCM_SUBCLASS_MULTI_MIX = 1,
     SND_PCM_SUBCLASS_LAST = 1,
 }
 
-enum snd_pcm_stream_t // pcm.h (99, 14)
+internal enum snd_pcm_stream_t // pcm.h (99, 14)
 {
     SND_PCM_STREAM_PLAYBACK = 0,
     SND_PCM_STREAM_CAPTURE = 1,
     SND_PCM_STREAM_LAST = 1,
 }
 
-enum snd_pcm_access_t // pcm.h (108, 14)
+internal enum snd_pcm_access_t // pcm.h (108, 14)
 {
     SND_PCM_ACCESS_MMAP_INTERLEAVED = 0,
     SND_PCM_ACCESS_MMAP_NONINTERLEAVED = 1,
@@ -185,7 +185,7 @@ enum snd_pcm_access_t // pcm.h (108, 14)
     SND_PCM_ACCESS_LAST = 4,
 }
 
-enum snd_pcm_format_t // pcm.h (123, 14)
+internal enum snd_pcm_format_t // pcm.h (123, 14)
 {
     SND_PCM_FORMAT_UNKNOWN = -1,
     SND_PCM_FORMAT_S8 = 0,
@@ -247,13 +247,13 @@ enum snd_pcm_format_t // pcm.h (123, 14)
     SND_PCM_FORMAT_IEC958_SUBFRAME = 18,
 }
 
-enum snd_pcm_subformat_t // pcm.h (266, 14)
+internal enum snd_pcm_subformat_t // pcm.h (266, 14)
 {
     SND_PCM_SUBFORMAT_STD = 0,
     SND_PCM_SUBFORMAT_LAST = 0,
 }
 
-enum snd_pcm_state_t // pcm.h (273, 14)
+internal enum snd_pcm_state_t // pcm.h (273, 14)
 {
     SND_PCM_STATE_OPEN = 0,
     SND_PCM_STATE_SETUP = 1,
@@ -267,21 +267,21 @@ enum snd_pcm_state_t // pcm.h (273, 14)
     SND_PCM_STATE_LAST = 8,
 }
 
-enum snd_pcm_start_t // pcm.h (296, 14)
+internal enum snd_pcm_start_t // pcm.h (296, 14)
 {
     SND_PCM_START_DATA = 0,
     SND_PCM_START_EXPLICIT = 1,
     SND_PCM_START_LAST = 1,
 }
 
-enum snd_pcm_xrun_t // pcm.h (305, 14)
+internal enum snd_pcm_xrun_t // pcm.h (305, 14)
 {
     SND_PCM_XRUN_NONE = 0,
     SND_PCM_XRUN_STOP = 1,
     SND_PCM_XRUN_LAST = 1,
 }
 
-enum snd_pcm_tstamp_t // pcm.h (314, 14)
+internal enum snd_pcm_tstamp_t // pcm.h (314, 14)
 {
     SND_PCM_TSTAMP_NONE = 0,
     SND_PCM_TSTAMP_ENABLE = 1,
@@ -289,7 +289,7 @@ enum snd_pcm_tstamp_t // pcm.h (314, 14)
     SND_PCM_TSTAMP_LAST = 1,
 }
 
-enum snd_pcm_tstamp_type_t // pcm.h (326, 14)
+internal enum snd_pcm_tstamp_type_t // pcm.h (326, 14)
 {
     SND_PCM_TSTAMP_TYPE_GETTIMEOFDAY = 0,
     SND_PCM_TSTAMP_TYPE_MONOTONIC = 1,
@@ -298,14 +298,14 @@ enum snd_pcm_tstamp_type_t // pcm.h (326, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_audio_tstamp_config_t // pcm.h (333, 16)
+internal struct snd_pcm_audio_tstamp_config_t // pcm.h (333, 16)
 {
     public uint @type_requested;
     public uint @report_delay;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_audio_tstamp_report_t // pcm.h (339, 16)
+internal struct snd_pcm_audio_tstamp_report_t // pcm.h (339, 16)
 {
     public uint @valid;
     public uint @actual_type;
@@ -314,11 +314,11 @@ struct snd_pcm_audio_tstamp_report_t // pcm.h (339, 16)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_t // pcm.h (374, 16)
+internal struct snd_pcm_t // pcm.h (374, 16)
 {
 }
 
-enum snd_pcm_type_t // pcm.h (377, 6)
+internal enum snd_pcm_type_t // pcm.h (377, 6)
 {
     SND_PCM_TYPE_HW = 0,
     SND_PCM_TYPE_HOOKS = 1,
@@ -355,7 +355,7 @@ enum snd_pcm_type_t // pcm.h (377, 6)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_channel_area_t // pcm.h (448, 16)
+internal struct snd_pcm_channel_area_t // pcm.h (448, 16)
 {
     [CTypeDetails("Pointer<void>")] public System.IntPtr @addr;
     public uint @first;
@@ -363,7 +363,7 @@ struct snd_pcm_channel_area_t // pcm.h (448, 16)
 }
 
 [StructLayout(LayoutKind.Explicit)]
-struct snd_pcm_sync_id_t // pcm.h (458, 15)
+internal struct snd_pcm_sync_id_t // pcm.h (458, 15)
 {
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
     [FieldOffset(0)]
@@ -377,11 +377,11 @@ struct snd_pcm_sync_id_t // pcm.h (458, 15)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_scope_t // pcm.h (468, 16)
+internal struct snd_pcm_scope_t // pcm.h (468, 16)
 {
 }
 
-enum snd_pcm_chmap_type // pcm.h (529, 6)
+internal enum snd_pcm_chmap_type // pcm.h (529, 6)
 {
     SND_CHMAP_TYPE_NONE = 0,
     SND_CHMAP_TYPE_FIXED = 1,
@@ -390,7 +390,7 @@ enum snd_pcm_chmap_type // pcm.h (529, 6)
     SND_CHMAP_TYPE_LAST = 3,
 }
 
-enum snd_pcm_chmap_position // pcm.h (538, 6)
+internal enum snd_pcm_chmap_position // pcm.h (538, 6)
 {
     SND_CHMAP_UNKNOWN = 0,
     SND_CHMAP_NA = 1,
@@ -433,20 +433,20 @@ enum snd_pcm_chmap_position // pcm.h (538, 6)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_chmap_t // pcm.h (588, 16)
+internal struct snd_pcm_chmap_t // pcm.h (588, 16)
 {
     public uint @channels;
     [CTypeDetails("ConstArrayOf<uint>")] public uint[] @pos;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_chmap_query_t // pcm.h (594, 16)
+internal struct snd_pcm_chmap_query_t // pcm.h (594, 16)
 {
     public snd_pcm_chmap_type @type;
     public snd_pcm_chmap_t @map;
 }
 
-enum snd_pcm_hook_type_t // pcm.h (1143, 14)
+internal enum snd_pcm_hook_type_t // pcm.h (1143, 14)
 {
     SND_PCM_HOOK_TYPE_HW_PARAMS = 0,
     SND_PCM_HOOK_TYPE_HW_FREE = 1,
@@ -455,12 +455,12 @@ enum snd_pcm_hook_type_t // pcm.h (1143, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_hook_t // pcm.h (1151, 16)
+internal struct snd_pcm_hook_t // pcm.h (1151, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_pcm_scope_ops_t // pcm.h (1172, 16)
+internal struct snd_pcm_scope_ops_t // pcm.h (1172, 16)
 {
     [CTypeDetails("Pointer<int (snd_pcm_scope_t *)>")] public Delegates.delegate4 @enable;
     [CTypeDetails("Pointer<void (snd_pcm_scope_t *)>")] public Delegates.delegate5 @disable;
@@ -471,41 +471,41 @@ struct snd_pcm_scope_ops_t // pcm.h (1172, 16)
     [CTypeDetails("Pointer<void (snd_pcm_scope_t *)>")] public Delegates.delegate5 @close;
 }
 
-enum snd_spcm_latency_t // pcm.h (1232, 14)
+internal enum snd_spcm_latency_t // pcm.h (1232, 14)
 {
     SND_SPCM_LATENCY_STANDARD = 0,
     SND_SPCM_LATENCY_MEDIUM = 1,
     SND_SPCM_LATENCY_REALTIME = 2,
 }
 
-enum snd_spcm_xrun_type_t // pcm.h (1245, 14)
+internal enum snd_spcm_xrun_type_t // pcm.h (1245, 14)
 {
     SND_SPCM_XRUN_IGNORE = 0,
     SND_SPCM_XRUN_STOP = 1,
 }
 
-enum snd_spcm_duplex_type_t // pcm.h (1253, 14)
+internal enum snd_spcm_duplex_type_t // pcm.h (1253, 14)
 {
     SND_SPCM_DUPLEX_LIBERAL = 0,
     SND_SPCM_DUPLEX_PEDANTIC = 1,
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_rawmidi_info_t // rawmidi.h (45, 16)
+internal struct snd_rawmidi_info_t // rawmidi.h (45, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_rawmidi_params_t // rawmidi.h (47, 16)
+internal struct snd_rawmidi_params_t // rawmidi.h (47, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_rawmidi_status_t // rawmidi.h (49, 16)
+internal struct snd_rawmidi_status_t // rawmidi.h (49, 16)
 {
 }
 
-enum snd_rawmidi_stream_t // rawmidi.h (52, 14)
+internal enum snd_rawmidi_stream_t // rawmidi.h (52, 14)
 {
     SND_RAWMIDI_STREAM_OUTPUT = 0,
     SND_RAWMIDI_STREAM_INPUT = 1,
@@ -513,11 +513,11 @@ enum snd_rawmidi_stream_t // rawmidi.h (52, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_rawmidi_t // rawmidi.h (68, 16)
+internal struct snd_rawmidi_t // rawmidi.h (68, 16)
 {
 }
 
-enum snd_rawmidi_type_t // rawmidi.h (71, 14)
+internal enum snd_rawmidi_type_t // rawmidi.h (71, 14)
 {
     SND_RAWMIDI_TYPE_HW = 0,
     SND_RAWMIDI_TYPE_SHM = 1,
@@ -526,41 +526,41 @@ enum snd_rawmidi_type_t // rawmidi.h (71, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_id_t // timer.h (47, 16)
+internal struct snd_timer_id_t // timer.h (47, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_ginfo_t // timer.h (49, 16)
+internal struct snd_timer_ginfo_t // timer.h (49, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_gparams_t // timer.h (51, 16)
+internal struct snd_timer_gparams_t // timer.h (51, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_gstatus_t // timer.h (53, 16)
+internal struct snd_timer_gstatus_t // timer.h (53, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_info_t // timer.h (55, 16)
+internal struct snd_timer_info_t // timer.h (55, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_params_t // timer.h (57, 16)
+internal struct snd_timer_params_t // timer.h (57, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_status_t // timer.h (59, 16)
+internal struct snd_timer_status_t // timer.h (59, 16)
 {
 }
 
-enum snd_timer_class_t // timer.h (61, 14)
+internal enum snd_timer_class_t // timer.h (61, 14)
 {
     SND_TIMER_CLASS_NONE = -1,
     SND_TIMER_CLASS_SLAVE = 0,
@@ -570,7 +570,7 @@ enum snd_timer_class_t // timer.h (61, 14)
     SND_TIMER_CLASS_LAST = 3,
 }
 
-enum snd_timer_slave_class_t // timer.h (71, 14)
+internal enum snd_timer_slave_class_t // timer.h (71, 14)
 {
     SND_TIMER_SCLASS_NONE = 0,
     SND_TIMER_SCLASS_APPLICATION = 1,
@@ -579,7 +579,7 @@ enum snd_timer_slave_class_t // timer.h (71, 14)
     SND_TIMER_SCLASS_LAST = 3,
 }
 
-enum snd_timer_event_t // timer.h (80, 14)
+internal enum snd_timer_event_t // timer.h (80, 14)
 {
     SND_TIMER_EVENT_RESOLUTION = 0,
     SND_TIMER_EVENT_TICK = 1,
@@ -599,21 +599,21 @@ enum snd_timer_event_t // timer.h (80, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_read_t // timer.h (100, 16)
+internal struct snd_timer_read_t // timer.h (100, 16)
 {
     public uint @resolution;
     public uint @ticks;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_tread_t // timer.h (106, 16)
+internal struct snd_timer_tread_t // timer.h (106, 16)
 {
     public snd_timer_event_t @event;
     public snd_htimestamp_t @tstamp;
     public uint @val;
 }
 
-enum snd_timer_type_t // timer.h (127, 14)
+internal enum snd_timer_type_t // timer.h (127, 14)
 {
     SND_TIMER_TYPE_HW = 0,
     SND_TIMER_TYPE_SHM = 1,
@@ -621,31 +621,31 @@ enum snd_timer_type_t // timer.h (127, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_query_t // timer.h (137, 16)
+internal struct snd_timer_query_t // timer.h (137, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_timer_t // timer.h (139, 16)
+internal struct snd_timer_t // timer.h (139, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_hwdep_info_t // hwdep.h (45, 16)
+internal struct snd_hwdep_info_t // hwdep.h (45, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_hwdep_dsp_status_t // hwdep.h (48, 16)
+internal struct snd_hwdep_dsp_status_t // hwdep.h (48, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_hwdep_dsp_image_t // hwdep.h (51, 16)
+internal struct snd_hwdep_dsp_image_t // hwdep.h (51, 16)
 {
 }
 
-enum snd_hwdep_iface_t // hwdep.h (54, 14)
+internal enum snd_hwdep_iface_t // hwdep.h (54, 14)
 {
     SND_HWDEP_IFACE_OPL2 = 0,
     SND_HWDEP_IFACE_OPL3 = 1,
@@ -674,7 +674,7 @@ enum snd_hwdep_iface_t // hwdep.h (54, 14)
     SND_HWDEP_IFACE_LAST = 23,
 }
 
-enum snd_hwdep_type_t // hwdep.h (93, 14)
+internal enum snd_hwdep_type_t // hwdep.h (93, 14)
 {
     SND_HWDEP_TYPE_HW = 0,
     SND_HWDEP_TYPE_SHM = 1,
@@ -682,12 +682,12 @@ enum snd_hwdep_type_t // hwdep.h (93, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_hwdep_t // hwdep.h (103, 16)
+internal struct snd_hwdep_t // hwdep.h (103, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_aes_iec958_t // control.h (46, 16)
+internal struct snd_aes_iec958_t // control.h (46, 16)
 {
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
     [CTypeDetails("ConstArrayOf<byte>")] public byte[] @status;
@@ -699,36 +699,36 @@ struct snd_aes_iec958_t // control.h (46, 16)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_card_info_t // control.h (54, 16)
+internal struct snd_ctl_card_info_t // control.h (54, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_elem_id_t // control.h (57, 16)
+internal struct snd_ctl_elem_id_t // control.h (57, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_elem_list_t // control.h (60, 16)
+internal struct snd_ctl_elem_list_t // control.h (60, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_elem_info_t // control.h (63, 16)
+internal struct snd_ctl_elem_info_t // control.h (63, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_elem_value_t // control.h (66, 16)
+internal struct snd_ctl_elem_value_t // control.h (66, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_event_t // control.h (69, 16)
+internal struct snd_ctl_event_t // control.h (69, 16)
 {
 }
 
-enum snd_ctl_elem_type_t // control.h (72, 14)
+internal enum snd_ctl_elem_type_t // control.h (72, 14)
 {
     SND_CTL_ELEM_TYPE_NONE = 0,
     SND_CTL_ELEM_TYPE_BOOLEAN = 1,
@@ -740,7 +740,7 @@ enum snd_ctl_elem_type_t // control.h (72, 14)
     SND_CTL_ELEM_TYPE_LAST = 6,
 }
 
-enum snd_ctl_elem_iface_t // control.h (91, 14)
+internal enum snd_ctl_elem_iface_t // control.h (91, 14)
 {
     SND_CTL_ELEM_IFACE_CARD = 0,
     SND_CTL_ELEM_IFACE_HWDEP = 1,
@@ -752,13 +752,13 @@ enum snd_ctl_elem_iface_t // control.h (91, 14)
     SND_CTL_ELEM_IFACE_LAST = 6,
 }
 
-enum snd_ctl_event_type_t // control.h (110, 14)
+internal enum snd_ctl_event_type_t // control.h (110, 14)
 {
     SND_CTL_EVENT_ELEM = 0,
     SND_CTL_EVENT_LAST = 0,
 }
 
-enum snd_ctl_type_t // control.h (193, 14)
+internal enum snd_ctl_type_t // control.h (193, 14)
 {
     SND_CTL_TYPE_HW = 0,
     SND_CTL_TYPE_SHM = 1,
@@ -767,47 +767,47 @@ enum snd_ctl_type_t // control.h (193, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_ctl_t // control.h (214, 16)
+internal struct snd_ctl_t // control.h (214, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_sctl_t // control.h (220, 16)
+internal struct snd_sctl_t // control.h (220, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_hctl_elem_t // control.h (520, 16)
+internal struct snd_hctl_elem_t // control.h (520, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_hctl_t // control.h (523, 16)
+internal struct snd_hctl_t // control.h (523, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_mixer_t // mixer.h (42, 16)
+internal struct snd_mixer_t // mixer.h (42, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_mixer_class_t // mixer.h (44, 16)
+internal struct snd_mixer_class_t // mixer.h (44, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_mixer_elem_t // mixer.h (46, 16)
+internal struct snd_mixer_elem_t // mixer.h (46, 16)
 {
 }
 
-enum snd_mixer_elem_type_t // mixer.h (90, 14)
+internal enum snd_mixer_elem_type_t // mixer.h (90, 14)
 {
     SND_MIXER_ELEM_SIMPLE = 0,
     SND_MIXER_ELEM_LAST = 0,
 }
 
-enum snd_mixer_selem_channel_id_t // mixer.h (170, 14)
+internal enum snd_mixer_selem_channel_id_t // mixer.h (170, 14)
 {
     SND_MIXER_SCHN_UNKNOWN = -1,
     SND_MIXER_SCHN_FRONT_LEFT = 0,
@@ -823,14 +823,14 @@ enum snd_mixer_selem_channel_id_t // mixer.h (170, 14)
     SND_MIXER_SCHN_MONO = 0,
 }
 
-enum snd_mixer_selem_regopt_abstract // mixer.h (197, 6)
+internal enum snd_mixer_selem_regopt_abstract // mixer.h (197, 6)
 {
     SND_MIXER_SABSTRACT_NONE = 0,
     SND_MIXER_SABSTRACT_BASIC = 1,
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_mixer_selem_regopt // mixer.h (205, 8)
+internal struct snd_mixer_selem_regopt // mixer.h (205, 8)
 {
     public int @ver;
     public snd_mixer_selem_regopt_abstract @abstract;
@@ -840,11 +840,11 @@ struct snd_mixer_selem_regopt // mixer.h (205, 8)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_mixer_selem_id_t // mixer.h (219, 16)
+internal struct snd_mixer_selem_id_t // mixer.h (219, 16)
 {
 }
 
-enum snd_seq_event_type // seq_event.h (44, 6)
+internal enum snd_seq_event_type // seq_event.h (44, 6)
 {
     SND_SEQ_EVENT_SYSTEM = 0,
     SND_SEQ_EVENT_RESULT = 1,
@@ -908,28 +908,28 @@ enum snd_seq_event_type // seq_event.h (44, 6)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_addr_t // seq_event.h (178, 16)
+internal struct snd_seq_addr_t // seq_event.h (178, 16)
 {
     public byte @client;
     public byte @port;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_connect_t // seq_event.h (184, 16)
+internal struct snd_seq_connect_t // seq_event.h (184, 16)
 {
     public snd_seq_addr_t @sender;
     public snd_seq_addr_t @dest;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_real_time_t // seq_event.h (191, 16)
+internal struct snd_seq_real_time_t // seq_event.h (191, 16)
 {
     public uint @tv_sec;
     public uint @tv_nsec;
 }
 
 [StructLayout(LayoutKind.Explicit)]
-struct snd_seq_timestamp_t // seq_event.h (200, 15)
+internal struct snd_seq_timestamp_t // seq_event.h (200, 15)
 {
     [FieldOffset(0)]
     public uint @tick;
@@ -938,7 +938,7 @@ struct snd_seq_timestamp_t // seq_event.h (200, 15)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_ev_note_t // seq_event.h (230, 16)
+internal struct snd_seq_ev_note_t // seq_event.h (230, 16)
 {
     public byte @channel;
     public byte @note;
@@ -948,7 +948,7 @@ struct snd_seq_ev_note_t // seq_event.h (230, 16)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_ev_ctrl_t // seq_event.h (239, 16)
+internal struct snd_seq_ev_ctrl_t // seq_event.h (239, 16)
 {
     public byte @channel;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
@@ -958,42 +958,42 @@ struct snd_seq_ev_ctrl_t // seq_event.h (239, 16)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_ev_raw8_t // seq_event.h (247, 16)
+internal struct snd_seq_ev_raw8_t // seq_event.h (247, 16)
 {
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
     [CTypeDetails("ConstArrayOf<byte>")] public byte[] @d;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_ev_raw32_t // seq_event.h (252, 16)
+internal struct snd_seq_ev_raw32_t // seq_event.h (252, 16)
 {
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
     [CTypeDetails("ConstArrayOf<uint>")] public uint[] @d;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_ev_ext_t // seq_event.h (257, 8)
+internal struct snd_seq_ev_ext_t // seq_event.h (257, 8)
 {
     public uint @len;
     [CTypeDetails("Pointer<void>")] public System.IntPtr @ptr;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_result_t // seq_event.h (269, 16)
+internal struct snd_seq_result_t // seq_event.h (269, 16)
 {
     public int @event;
     public int @result;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_queue_skew_t // seq_event.h (275, 16)
+internal struct snd_seq_queue_skew_t // seq_event.h (275, 16)
 {
     public uint @value;
     public uint @base;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_ev_queue_control_t // seq_event.h (281, 16)
+internal struct snd_seq_ev_queue_control_t // seq_event.h (281, 16)
 {
     public byte @queue;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
@@ -1002,7 +1002,7 @@ struct snd_seq_ev_queue_control_t // seq_event.h (281, 16)
 }
 
 [StructLayout(LayoutKind.Explicit)]
-struct anonymous_type_1 // seq_event.h (284, 2)
+internal struct anonymous_type_1 // seq_event.h (284, 2)
 {
     [FieldOffset(0)]
     public int @value;
@@ -1021,7 +1021,7 @@ struct anonymous_type_1 // seq_event.h (284, 2)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_event_t // seq_event.h (296, 16)
+internal struct snd_seq_event_t // seq_event.h (296, 16)
 {
     public byte @type;
     public byte @flags;
@@ -1036,7 +1036,7 @@ struct snd_seq_event_t // seq_event.h (296, 16)
 }
 
 [StructLayout(LayoutKind.Explicit)]
-struct anonymous_type_3 // seq_event.h (307, 2)
+internal struct anonymous_type_3 // seq_event.h (307, 2)
 {
     [FieldOffset(0)]
     public snd_seq_ev_note_t @note;
@@ -1061,11 +1061,11 @@ struct anonymous_type_3 // seq_event.h (307, 2)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_t // seq.h (47, 16)
+internal struct snd_seq_t // seq.h (47, 16)
 {
 }
 
-enum snd_seq_type_t // seq.h (62, 14)
+internal enum snd_seq_type_t // seq.h (62, 14)
 {
     SND_SEQ_TYPE_HW = 0,
     SND_SEQ_TYPE_SHM = 1,
@@ -1073,68 +1073,68 @@ enum snd_seq_type_t // seq.h (62, 14)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_system_info_t // seq.h (95, 16)
+internal struct snd_seq_system_info_t // seq.h (95, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_client_info_t // seq.h (125, 16)
+internal struct snd_seq_client_info_t // seq.h (125, 16)
 {
 }
 
-enum snd_seq_client_type_t // seq.h (128, 14)
+internal enum snd_seq_client_type_t // seq.h (128, 14)
 {
     SND_SEQ_USER_CLIENT = 1,
     SND_SEQ_KERNEL_CLIENT = 2,
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_client_pool_t // seq.h (172, 16)
+internal struct snd_seq_client_pool_t // seq.h (172, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_port_info_t // seq.h (207, 16)
+internal struct snd_seq_port_info_t // seq.h (207, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_port_subscribe_t // seq.h (319, 16)
+internal struct snd_seq_port_subscribe_t // seq.h (319, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_query_subscribe_t // seq.h (351, 16)
+internal struct snd_seq_query_subscribe_t // seq.h (351, 16)
 {
 }
 
-enum snd_seq_query_subs_type_t // seq.h (354, 9)
+internal enum snd_seq_query_subs_type_t // seq.h (354, 9)
 {
     SND_SEQ_QUERY_SUBS_READ = 0,
     SND_SEQ_QUERY_SUBS_WRITE = 1,
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_queue_info_t // seq.h (398, 16)
+internal struct snd_seq_queue_info_t // seq.h (398, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_queue_status_t // seq.h (400, 16)
+internal struct snd_seq_queue_status_t // seq.h (400, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_queue_tempo_t // seq.h (402, 16)
+internal struct snd_seq_queue_tempo_t // seq.h (402, 16)
 {
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_queue_timer_t // seq.h (404, 16)
+internal struct snd_seq_queue_timer_t // seq.h (404, 16)
 {
 }
 
-enum snd_seq_queue_timer_type_t // seq.h (484, 9)
+internal enum snd_seq_queue_timer_type_t // seq.h (484, 9)
 {
     SND_SEQ_TIMER_ALSA = 0,
     SND_SEQ_TIMER_MIDI_CLOCK = 1,
@@ -1142,11 +1142,11 @@ enum snd_seq_queue_timer_type_t // seq.h (484, 9)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_seq_remove_events_t // seq.h (535, 16)
+internal struct snd_seq_remove_events_t // seq.h (535, 16)
 {
 }
 
-enum anonymous_type_6 // seq.h (600, 1)
+internal enum anonymous_type_6 // seq.h (600, 1)
 {
     SND_SEQ_EVFLG_RESULT = 0,
     SND_SEQ_EVFLG_NOTE = 1,
@@ -1166,13 +1166,13 @@ enum anonymous_type_6 // seq.h (600, 1)
     SND_SEQ_EVFLG_VARUSR = 15,
 }
 
-enum anonymous_type_7 // seq.h (619, 1)
+internal enum anonymous_type_7 // seq.h (619, 1)
 {
     SND_SEQ_EVFLG_NOTE_ONEARG = 0,
     SND_SEQ_EVFLG_NOTE_TWOARG = 1,
 }
 
-enum anonymous_type_8 // seq.h (624, 1)
+internal enum anonymous_type_8 // seq.h (624, 1)
 {
     SND_SEQ_EVFLG_QUEUE_NOARG = 0,
     SND_SEQ_EVFLG_QUEUE_TICK = 1,
@@ -1181,7 +1181,7 @@ enum anonymous_type_8 // seq.h (624, 1)
 }
 
 [StructLayout(LayoutKind.Sequential)]
-struct snd_midi_event_t // seq_midi_event.h (43, 16)
+internal struct snd_midi_event_t // seq_midi_event.h (43, 16)
 {
 }
 

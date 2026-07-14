@@ -2,7 +2,7 @@
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaSubscriptionQuery
+internal class AlsaSubscriptionQuery
 {
     static IntPtr Malloc()
     {

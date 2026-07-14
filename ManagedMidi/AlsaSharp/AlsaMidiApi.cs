@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaMidiApi
+internal class AlsaMidiApi
 {
     // FIXME: can SYNTH be excluded? Chromium does not use it but RtMidi does.
     const AlsaPortType midi_port_type = AlsaPortType.MidiGeneric | AlsaPortType.Application;

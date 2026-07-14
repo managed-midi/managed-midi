@@ -2,7 +2,7 @@
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaSystemInfo : IDisposable
+internal class AlsaSystemInfo : IDisposable
 {
     public AlsaSystemInfo()
     {
