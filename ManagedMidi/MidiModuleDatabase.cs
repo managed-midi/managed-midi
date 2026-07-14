@@ -8,184 +8,188 @@ using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace Commons.Music.Midi
+namespace ManagedMidi;
+
+public abstract class MidiModuleDatabase
 {
-	public abstract class MidiModuleDatabase
-	{
-		public static readonly MidiModuleDatabase Default = new DefaultMidiModuleDatabase ();
+    public static readonly MidiModuleDatabase Default = new DefaultMidiModuleDatabase();
 
-		public abstract IEnumerable<MidiModuleDefinition> All ();
-		
-		public abstract MidiModuleDefinition Resolve (string moduleName);
-	}
+    public abstract IEnumerable<MidiModuleDefinition> All();
 
-	public class MergedMidiModuleDatabase : MidiModuleDatabase
-	{
-		public MergedMidiModuleDatabase (IEnumerable<MidiModuleDatabase> sources)
-		{
-			List = new List<MidiModuleDatabase> ();
-		}
-		
-		public IList<MidiModuleDatabase> List { get; private set; }
+    public abstract MidiModuleDefinition Resolve(string moduleName);
+}
 
-		public override IEnumerable<MidiModuleDefinition> All () => List.SelectMany (d => d.All ());
+public class MergedMidiModuleDatabase : MidiModuleDatabase
+{
+    public MergedMidiModuleDatabase(IEnumerable<MidiModuleDatabase> sources)
+    {
+        List = new List<MidiModuleDatabase>();
+    }
 
-		public override MidiModuleDefinition Resolve (string moduleName)
-		{
-			return List.Select (d => d.Resolve (moduleName)).FirstOrDefault (m => m != null);
-		}
-	}
-	
-	class DefaultMidiModuleDatabase : MidiModuleDatabase
-	{
-		static readonly Assembly ass = typeof (DefaultMidiModuleDatabase).GetTypeInfo ().Assembly;
+    public IList<MidiModuleDatabase> List { get; private set; }
 
-		// am too lazy to adjust resource names :/
-		public static Stream GetResource (string name)
-		{
-			return ass.GetManifestResourceStream (ass.GetManifestResourceNames ().FirstOrDefault (m => m.EndsWith (name, StringComparison.OrdinalIgnoreCase)));
-		}
+    public override IEnumerable<MidiModuleDefinition> All() => List.SelectMany(d => d.All());
 
-		public DefaultMidiModuleDatabase ()
-		{
-			Modules = new List<MidiModuleDefinition> ();
-			var catalog = new StreamReader (GetResource ("midi-module-catalog.txt")).ReadToEnd ().Split ('\n');
-			foreach (string filename in catalog.Select (s => s.Trim ())) // strip extraneous \r
-				if (filename.Length > 0)
-					Modules.Add (MidiModuleDefinition.Load (GetResource (filename)));
-		}
+    public override MidiModuleDefinition Resolve(string moduleName)
+    {
+        return List.Select(d => d.Resolve(moduleName)).FirstOrDefault(m => m != null);
+    }
+}
 
-		public override IEnumerable<MidiModuleDefinition> All () => Modules;
+class DefaultMidiModuleDatabase : MidiModuleDatabase
+{
+    static readonly Assembly ass = typeof(DefaultMidiModuleDatabase).GetTypeInfo().Assembly;
 
-		public override MidiModuleDefinition Resolve (string moduleName)
-		{
-			if (moduleName == null)
-				return null;
-			string name = ResolvePossibleAlias (moduleName);
-			return Modules.FirstOrDefault (m => m.Name == name) ?? Modules.FirstOrDefault (m => m.Match != null && new Regex (m.Match).IsMatch (name) || name.Contains (m.Name));
-		}
+    // am too lazy to adjust resource names :/
+    public static Stream GetResource(string name)
+    {
+        return ass.GetManifestResourceStream(ass.GetManifestResourceNames().FirstOrDefault(m => m.EndsWith(name, StringComparison.OrdinalIgnoreCase)));
+    }
 
-		public string ResolvePossibleAlias (string name)
-		{
-			switch (name) {
-			case "Microsoft GS Wavetable Synth":
-				return "Microsoft GS Wavetable SW Synth";
-			}
-			return name;
-		}
+    public DefaultMidiModuleDatabase()
+    {
+        Modules = new List<MidiModuleDefinition>();
+        var catalog = new StreamReader(GetResource("midi-module-catalog.txt")).ReadToEnd().Split('\n');
+        foreach (string filename in catalog.Select(s => s.Trim())) // strip extraneous \r
+            if (filename.Length > 0)
+                Modules.Add(MidiModuleDefinition.Load(GetResource(filename)));
+    }
 
-		public IList<MidiModuleDefinition> Modules { get; private set; }
-	}
+    public override IEnumerable<MidiModuleDefinition> All() => Modules;
 
-	[DataContract]
-	public class MidiModuleDefinition
-	{
-		public MidiModuleDefinition ()
-		{
-			Instrument = new MidiInstrumentDefinition ();
-		}
+    public override MidiModuleDefinition Resolve(string moduleName)
+    {
+        if (moduleName == null)
+            return null;
+        string name = ResolvePossibleAlias(moduleName);
+        return Modules.FirstOrDefault(m => m.Name == name) ?? Modules.FirstOrDefault(m => m.Match != null && new Regex(m.Match).IsMatch(name) || name.Contains(m.Name));
+    }
 
-		[DataMember]
-		public string Name { get; set; }
+    public string ResolvePossibleAlias(string name)
+    {
+        switch (name)
+        {
+            case "Microsoft GS Wavetable Synth":
+                return "Microsoft GS Wavetable SW Synth";
+        }
+        return name;
+    }
 
-		[DataMember]
-		public string Match { get; set; }
+    public IList<MidiModuleDefinition> Modules { get; private set; }
+}
 
-		[DataMember]
-		public MidiInstrumentDefinition Instrument { get; set; }
+[DataContract]
+public class MidiModuleDefinition
+{
+    public MidiModuleDefinition()
+    {
+        Instrument = new MidiInstrumentDefinition();
+    }
 
-		// serialization
+    [DataMember]
+    public string Name { get; set; }
 
-		public void Save (Stream stream)
-		{
-			var ds = new DataContractJsonSerializer (typeof (MidiModuleDefinition));
-			ds.WriteObject (stream, this);
-		}
+    [DataMember]
+    public string Match { get; set; }
 
-		public static MidiModuleDefinition Load (Stream stream)
-		{
-			var ds = new DataContractJsonSerializer (typeof (MidiModuleDefinition));
-			return (MidiModuleDefinition) ds.ReadObject (stream);
-		}
-	}
+    [DataMember]
+    public MidiInstrumentDefinition Instrument { get; set; }
 
-	[DataContract]
-	public class MidiInstrumentDefinition
-	{
-		public MidiInstrumentDefinition ()
-		{
-			Maps = new List<MidiInstrumentMap> ();
-			DrumMaps = new List<MidiInstrumentMap> ();
-		}
+    // serialization
 
-		public IList<MidiInstrumentMap> Maps { get; private set; }
+    public void Save(Stream stream)
+    {
+        var ds = new DataContractJsonSerializer(typeof(MidiModuleDefinition));
+        ds.WriteObject(stream, this);
+    }
 
-		public IList<MidiInstrumentMap> DrumMaps { get; private set; }
+    public static MidiModuleDefinition Load(Stream stream)
+    {
+        var ds = new DataContractJsonSerializer(typeof(MidiModuleDefinition));
+        return (MidiModuleDefinition) ds.ReadObject(stream);
+    }
+}
 
-		[DataMember (Name = "Maps")]
-		MidiInstrumentMap [] maps {
-			get { return Maps.ToArray (); }
-			set { Maps = new List<MidiInstrumentMap> (value); }
-		}
+[DataContract]
+public class MidiInstrumentDefinition
+{
+    public MidiInstrumentDefinition()
+    {
+        Maps = new List<MidiInstrumentMap>();
+        DrumMaps = new List<MidiInstrumentMap>();
+    }
 
-		[DataMember (Name = "DrumMaps")]
-		MidiInstrumentMap [] drumMaps {
-			get { return DrumMaps.ToArray (); }
-			set { DrumMaps = new List<MidiInstrumentMap> (value); }
-		}
-	}
+    public IList<MidiInstrumentMap> Maps { get; private set; }
 
-	[DataContract]
-	public class MidiInstrumentMap
-	{
-		public MidiInstrumentMap ()
-		{
-			Programs = new List<MidiProgramDefinition> ();
-		}
-		
-		[DataMember]
-		public string Name { get; set; }
+    public IList<MidiInstrumentMap> DrumMaps { get; private set; }
 
-		public IList<MidiProgramDefinition> Programs { get; private set; }
+    [DataMember(Name = "Maps")]
+    MidiInstrumentMap[] maps
+    {
+        get { return Maps.ToArray(); }
+        set { Maps = new List<MidiInstrumentMap>(value); }
+    }
 
-		[DataMember (Name = "Programs")]
-		MidiProgramDefinition [] programs {
-			get { return Programs.ToArray (); }
-			set { Programs = new List<MidiProgramDefinition> (value); }
-		}
-	}
+    [DataMember(Name = "DrumMaps")]
+    MidiInstrumentMap[] drumMaps
+    {
+        get { return DrumMaps.ToArray(); }
+        set { DrumMaps = new List<MidiInstrumentMap>(value); }
+    }
+}
 
-	[DataContract]
-	public class MidiProgramDefinition
-	{
-		public MidiProgramDefinition ()
-		{
-			Banks = new List<MidiBankDefinition> ();
-		}
+[DataContract]
+public class MidiInstrumentMap
+{
+    public MidiInstrumentMap()
+    {
+        Programs = new List<MidiProgramDefinition>();
+    }
 
-		[DataMember]
-		public string Name { get; set; }
-		[DataMember]
-		public int Index { get; set; }
+    [DataMember]
+    public string Name { get; set; }
+
+    public IList<MidiProgramDefinition> Programs { get; private set; }
+
+    [DataMember(Name = "Programs")]
+    MidiProgramDefinition[] programs
+    {
+        get { return Programs.ToArray(); }
+        set { Programs = new List<MidiProgramDefinition>(value); }
+    }
+}
+
+[DataContract]
+public class MidiProgramDefinition
+{
+    public MidiProgramDefinition()
+    {
+        Banks = new List<MidiBankDefinition>();
+    }
+
+    [DataMember]
+    public string Name { get; set; }
+    [DataMember]
+    public int Index { get; set; }
 
 
-		public IList<MidiBankDefinition> Banks { get; private set; }
+    public IList<MidiBankDefinition> Banks { get; private set; }
 
-		[DataMember (Name = "Banks")]
-		MidiBankDefinition [] banks {
-			get { return Banks.ToArray (); }
-			set { Banks = new List<MidiBankDefinition> (value); }
-		}
-	}
+    [DataMember(Name = "Banks")]
+    MidiBankDefinition[] banks
+    {
+        get { return Banks.ToArray(); }
+        set { Banks = new List<MidiBankDefinition>(value); }
+    }
+}
 
-	[DataContract]
-	public class MidiBankDefinition
-	{
-		[DataMember]
-		public string Name { get; set; }
-		[DataMember]
-		public int Msb { get; set; }
-		[DataMember]
-		public int Lsb { get; set; }
-	}
+[DataContract]
+public class MidiBankDefinition
+{
+    [DataMember]
+    public string Name { get; set; }
+    [DataMember]
+    public int Msb { get; set; }
+    [DataMember]
+    public int Lsb { get; set; }
 }
