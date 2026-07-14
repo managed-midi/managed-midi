@@ -3,6 +3,7 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Project Path="ManagedMidi.ConsolePlayer/ManagedMidi.ConsolePlayer.csproj" Id="1333cfbd-300e-43fb-8555-2cdb8cfd2fa8" />
+  <Project Path="ManagedMidi.ConsoleRecorder/ManagedMidi.ConsoleRecorder.csproj" Id="399d8d0e-8790-4614-9516-5fbb1907aeb1" />
   <Project Path="ManagedMidi.Tests/ManagedMidi.Tests.csproj" Id="af63471b-278d-46f7-b76d-179336d189f7" />
   <Project Path="ManagedMidi/ManagedMidi.csproj" Id="4c50241c-4071-45a5-a424-38f2190a137f" />
 </Solution>
