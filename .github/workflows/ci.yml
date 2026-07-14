@@ -10,15 +10,18 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - name: 'Linux'
-            platform:  'linux/amd64'
-            os: 'ubuntu-latest'
+          # For now, only build and test on Windows. It's better
+          # than nothing... we'll come back to these. See
+          # https://github.com/managed-midi/managed-midi/issues/3
+          #- name: 'Linux'
+          #  platform:  'linux/amd64'
+          #  os: 'ubuntu-latest'
           - name: 'Windows'
             platform:  'windows/amd64'
             os: 'windows-latest'
-          - name: 'MacOS'
-            platform:  'darwin/universal'
-            os: 'macos-latest'
+          #- name: 'MacOS'
+          #  platform:  'darwin/universal'
+          #  os: 'macos-latest'
 
     runs-on: ${{ matrix.build.os }}
 
@@ -33,8 +36,8 @@ jobs:
 
       - name: Build
         run: |
-          dotnet build ManagedMidi.slnx
-          dotnet test ManagedMidi.slnx
+          dotnet build -c Release ManagedMidi.slnx
+          dotnet test -c Release ManagedMidi.slnx
 
       - name: Pack 
-        run: nuget pack ManagedMidi.slnx
+        run: dotnet pack -c Release ManagedMidi
