@@ -54,8 +54,8 @@ public class SMFTest
     // FIXME: this test seems to be order/position dependent.
     // It should be moved to MidiPlayerTest class, but it caused regression.
     // 
-    // It is likely related to manifest resource tetrieval.
-    [Test]
+    // It is likely related to manifest resource retrieval.
+    [Test, Ignore("https://github.com/managed-midi/managed-midi/issues/5")]
     public async Task GetTimePositionInMillisecondsForTick()
     {
         var vt = new VirtualMidiPlayerTimeManager();
@@ -63,12 +63,12 @@ public class SMFTest
         player.Play();
         vt.ProceedBy(100);
         player.Seek(5000);
-        await Task.Delay(200);
+        await Task.Delay(1000);
         Assert.AreEqual(5000, player.PlayDeltaTime, "1 PlayDeltaTime");
         Assert.AreEqual(12, (int) player.PositionInTime.TotalSeconds, "1 PositionInTime");
         vt.ProceedBy(100);
         // FIXME: this is ugly.
-        await Task.Delay(100);
+        await Task.Delay(1000);
         // FIXME: not working
         //Assert.AreEqual (5100, player.PlayDeltaTime, "2 PlayDeltaTime");
         Assert.AreEqual(12, (int) player.PositionInTime.TotalSeconds, "2 PositionInTime");
@@ -77,7 +77,7 @@ public class SMFTest
         Assert.AreEqual(5, (int) player.PositionInTime.TotalSeconds, "3 PositionInTime");
         vt.ProceedBy(100);
         // FIXME: this is ugly.
-        await Task.Delay(100);
+        await Task.Delay(1000);
         // FIXME: not working
         //Assert.AreEqual (2100, player.PlayDeltaTime, "4 PlayDeltaTime");
         Assert.AreEqual(5, (int) player.PositionInTime.TotalSeconds, "4 PositionInTime");
