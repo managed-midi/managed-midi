@@ -1,3 +1,11 @@
+# Note: this fork is a work in progress
+
+This is a fork from https://github.com/atsushieno/managed-midi. It is intended to *eventually* become the new home for the codebase currently in the `managed-midi` NuGet package, although current plans are to create a new package called `ManagedMidi`, with a `ManagedMidi` namespace.
+
+See https://codeblog.jonskeet.uk/2026/07/11/forking-an-open-source-project/ for more details.
+
+The content below is from the original fork; this will be edited when more progress has been made.
+
 # managed-midi
 
 managed-midi aims to provide C#/.NET API For almost-raw access to MIDI devices in cross-platform manner with the greatest common measure so that it can be "commons" either on Mono or .NET, everywhere, as well as standard MIDI file manipulation and player functionality.
