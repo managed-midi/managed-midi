@@ -23,7 +23,6 @@ using OSStatus = System.Int32;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Commons.Music.Midi.PortMidi;
 using nint = System.Int64;
 using ItemCount = System.Int64;
 

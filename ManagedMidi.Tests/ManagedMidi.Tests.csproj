@@ -13,4 +13,8 @@
 		<PackageReference Include="NUnit" />
 		<PackageReference Include="NUnit3TestAdapter" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ManagedMidi\ManagedMidi.csproj" />
+	</ItemGroup>
 </Project>

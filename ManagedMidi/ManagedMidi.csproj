@@ -12,4 +12,16 @@
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Update="MidiAccessManager.*.cs">
+			<DependentUpon>MidiAccessManager.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="CoreMidi\" />
+	  <Folder Include="Alsa\" />
+	  <Folder Include="WinMM\" />
+	</ItemGroup>
 </Project>

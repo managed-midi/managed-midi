@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Commons.Music.Midi;
-using AlsaSharp;
+using ManagedMidi.AlsaSharp;
 
 namespace Commons.Music.Midi.Alsa {
 	public class AlsaMidiAccess : IMidiAccess2 {
@@ -166,7 +166,7 @@ namespace Commons.Music.Midi.Alsa {
 	{
 		AlsaPortInfo port;
 
-		public AlsaMidiPortDetails (AlsaPortInfo port)
+        internal AlsaMidiPortDetails (AlsaPortInfo port)
 		{
 			this.port = port;
 		}
@@ -187,7 +187,7 @@ namespace Commons.Music.Midi.Alsa {
 		AlsaSequencer seq;
 		AlsaMidiPortDetails port, source_port;
 
-		public AlsaMidiInput (AlsaSequencer seq, AlsaMidiPortDetails appPort, AlsaMidiPortDetails sourcePort)
+        internal AlsaMidiInput (AlsaSequencer seq, AlsaMidiPortDetails appPort, AlsaMidiPortDetails sourcePort)
 		{
 			this.seq = seq;
 			this.port = appPort;
@@ -228,7 +228,7 @@ namespace Commons.Music.Midi.Alsa {
 		AlsaSequencer seq;
 		AlsaMidiPortDetails port, target_port;
 
-		public AlsaMidiOutput (AlsaSequencer seq, AlsaMidiPortDetails appPort, AlsaMidiPortDetails targetPort)
+		internal AlsaMidiOutput (AlsaSequencer seq, AlsaMidiPortDetails appPort, AlsaMidiPortDetails targetPort)
 		{
 			this.seq = seq;
 			this.port = appPort;
