@@ -29,30 +29,6 @@ namespace Commons.Music.Midi.Tests
 			player.Dispose ();
 		}
 
-		[Ignore ("rtmidi may not be runnable depending on the test runner platform")]
-		[Test]
-		public void PlayRtMidi ()
-		{
-			var vt = new AlmostVirtualMidiPlayerTimeManager ();
-			var player = TestHelper.GetMidiPlayer (vt, new RtMidi.RtMidiAccess ());
-			player.Play ();
-			vt.ProceedBy (200000);
-			player.Pause ();
-			player.Dispose ();
-		}
-
-		[Ignore ("portmidi may not be runnable depending on the test runner platform")]
-		[Test]
-		public void PlayPortMidi ()
-		{
-			var vt = new AlmostVirtualMidiPlayerTimeManager ();
-			var player = TestHelper.GetMidiPlayer (vt, new PortMidi.PortMidiAccess ());
-			player.Play ();
-			vt.ProceedBy (200000);
-			player.Pause ();
-			player.Dispose ();
-		}
-
 		[Test]
 		public void PlaybackCompletedToEnd ()
 		{
