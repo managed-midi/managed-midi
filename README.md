@@ -4,6 +4,11 @@ This is a fork from https://github.com/atsushieno/managed-midi. It is intended t
 
 See https://codeblog.jonskeet.uk/2026/07/11/forking-an-open-source-project/ for more details.
 
+Many things are still to-do, including:
+
+- Copyright and licensing details
+- Credit for alsa-sharp now that the code is in this repo
+
 The content below is from the original fork; this will be edited when more progress has been made.
 
 # managed-midi

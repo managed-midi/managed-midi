@@ -1,3 +1,0 @@
-[submodule "external/alsa-sharp"]
-	path = external/alsa-sharp
-	url = https://github.com/atsushieno/alsa-sharp.git
