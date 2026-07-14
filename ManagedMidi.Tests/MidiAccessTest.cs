@@ -1,9 +1,4 @@
-﻿using NUnit.Framework;
-using System;
-using System.Linq;
-using System.Threading;
-
-namespace ManagedMidi.Tests;
+﻿namespace ManagedMidi.Tests;
 
 [TestFixture]
 public class MidiAccessTest
