@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaClientInfo : IDisposable
+internal class AlsaClientInfo : IDisposable
 {
     static IntPtr Malloc()
     {

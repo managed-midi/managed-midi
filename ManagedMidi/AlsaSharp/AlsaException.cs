@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaException : Exception
+internal class AlsaException : Exception
 {
 
     static string GetErrorMessage(int errorCode)

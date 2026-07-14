@@ -2,21 +2,21 @@ using System;
 
 namespace ManagedMidi.AlsaSharp;
 
-public enum AlsaIOType
+internal enum AlsaIOType
 {
     Output = 1,
     Input = 2,
     Duplex = Output | Input,
 }
 
-public enum AlsaIOMode
+internal enum AlsaIOMode
 {
     None = 0,
     NonBlocking = 1,
 }
 
 [Flags]
-public enum AlsaPortType
+internal enum AlsaPortType
 {
     /** Messages sent from/to this port have device-specific semantics. */
     Specific = 1,
@@ -56,7 +56,7 @@ public enum AlsaPortType
 }
 
 [Flags]
-public enum AlsaPortCapabilities
+internal enum AlsaPortCapabilities
 {
     /**< readable from this port */
     Read = 1 << 0,
@@ -76,26 +76,26 @@ public enum AlsaPortCapabilities
     NoExport = 1 << 7,
 }
 
-public enum AlsaSequencerType // seq.h (62, 14)
+internal enum AlsaSequencerType // seq.h (62, 14)
 {
     Hardware = 0,
     SharedMemory = 1,
     Network = 2,
 }
 
-public enum AlsaClientType
+internal enum AlsaClientType
 {
     Kernel,
     User,
 }
 
-public enum AlsaSubscriptionQueryType
+internal enum AlsaSubscriptionQueryType
 {
     Read,
     Write,
 }
 
-public enum AlsaSequencerEventType
+internal enum AlsaSequencerEventType
 {
     System = 0,
     Result,

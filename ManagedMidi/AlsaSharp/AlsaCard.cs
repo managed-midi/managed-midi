@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaCard
+internal class AlsaCard
 {
     public static string GetCardName(int card)
     {

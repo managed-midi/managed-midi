@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaPortInfo : IDisposable
+internal class AlsaPortInfo : IDisposable
 {
     public const int PortSystemTimer = 0;
     public const int PortSystemAnnouncement = 1;

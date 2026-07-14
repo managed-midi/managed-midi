@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaPortSubscription
+internal class AlsaPortSubscription
 {
 	public class Address
 	{

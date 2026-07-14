@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ManagedMidi.AlsaSharp;
 
-public class AlsaSequencer : IDisposable
+internal class AlsaSequencer : IDisposable
 {
     public const int ClientSystem = 0;
     const int POLLIN = 1;
@@ -392,7 +392,7 @@ public class AlsaSequencer : IDisposable
 
 // This is a class for temporary managed class to make it possible to unmarshal via PtrToStructure.
 [StructLayout(LayoutKind.Sequential)]
-public class AlsaSequencerEvent
+internal class AlsaSequencerEvent
 {
     byte type;
     byte flags;
