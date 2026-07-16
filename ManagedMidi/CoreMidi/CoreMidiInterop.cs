@@ -1,34 +1,26 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-using MIDIClientRef = System.IntPtr;
-using MIDIPortRef = System.IntPtr;
-using MIDIEndpointRef = System.IntPtr;
-using MIDIDeviceRef = System.IntPtr;
-using MIDIEntityRef = System.IntPtr;
-using MIDIObjectRef = System.IntPtr;
-using CFStringRef = System.IntPtr;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using ByteCount = System.Int32;
 using CFDataRef = System.IntPtr;
 using CFDictionaryRef = System.IntPtr;
 using CFPropertyListRef = System.IntPtr;
+using CFStringRef = System.IntPtr;
+using ItemCount = System.Int64;
+using MIDIClientRef = System.IntPtr;
+using MIDIDeviceRef = System.IntPtr;
+using MIDIEndpointRef = System.IntPtr;
+using MIDIEntityRef = System.IntPtr;
 using MIDINotificationPtr = System.IntPtr;
+using MIDIObjectRef = System.IntPtr;
+using MIDIObjectType = System.Int32;
 using MIDIPacketListPtr = System.IntPtr;
 using MIDIPacketPtr = System.IntPtr;
+using MIDIPortRef = System.IntPtr;
 using MIDISysexSendRequestPtr = System.IntPtr;
-using ByteCount = System.Int32;
-using MIDIObjectType = System.Int32;
 using MIDITimeStamp = System.Int64;
 using MIDIUniqueID = System.Int32;
-using OSStatus = System.Int32;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using nint = System.Int64;
-using ItemCount = System.Int64;
-
-using CFAllocatorRef = System.IntPtr;
-using CFStringEncoding = System.Int32;
-using CFTypeRef = System.IntPtr;
+using OSStatus = System.Int32;
 
 namespace ManagedMidi.CoreMidi;
 
@@ -189,7 +181,9 @@ internal class MidiEndpoint : IDisposable
     String GetStringProp(IntPtr id)
     {
         if (id == IntPtr.Zero)
+        {
             return null;
+        }
 
         CFStringRef str;
         CoreMidiInterop.MIDIObjectGetStringProperty(Handle, id, out str);
@@ -197,11 +191,15 @@ internal class MidiEndpoint : IDisposable
         unsafe
         {
             if (cstr == IntPtr.Zero)
+            {
                 return null;
+            }
             byte* p = (byte*) cstr;
             int count = 0;
             for (byte* i = p; *i != 0; i++)
+            {
                 count++;
+            }
             return System.Text.Encoding.UTF8.GetString((byte*) cstr, count);
         }
     }
@@ -245,7 +243,9 @@ internal class MidiPort : IDisposable
     public void CallMessageReceived(MIDIPacketListPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
     {
         if (MessageReceived == null)
+        {
             return;
+        }
         var packets = new List<MidiPacket>();
         var list = Marshal.PtrToStructure<MidiPacketListNative>(pktlist);
         var p = pktlist + 4;
@@ -298,7 +298,9 @@ internal class MidiPort : IDisposable
 
         var p = CoreMidiInterop.MIDIPacketListInit(list);
         foreach (var item in arr)
+        {
             p = CoreMidiInterop.MIDIPacketListAdd(list, 1024, p, item.TimeStamp, item.Length, item.Bytes);
+        }
         CoreMidiInterop.MIDISend(Handle, endpoint.Handle, list);
     }
 }
@@ -330,7 +332,9 @@ internal class ReadDispatcher : IDisposable
         DispatchProc = dispatchRead;
 
         lock (read_procs)
+        {
             read_procs.Add(DispatchProc);
+        }
     }
 
     private void dispatchRead(MIDIPacketListPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
@@ -341,7 +345,9 @@ internal class ReadDispatcher : IDisposable
     public void Dispose()
     {
         lock (read_procs)
+        {
             read_procs.Remove(DispatchProc);
+        }
     }
 }
 
@@ -353,7 +359,9 @@ internal class MidiClient : IDisposable
         name_string = Midi.CreateCFStringRef(name);
         int ret = CoreMidiInterop.MIDIClientCreate(name_string, null, IntPtr.Zero, out h);
         if (ret != 0)
+        {
             throw new MidiException($"Failed to create MIDI client for {name}: error code {ret}");
+        }
         Handle = h;
     }
 
