@@ -9,5 +9,13 @@
 		<Nullable>disable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Version>1.0.0-alpha.1</Version>
+		<Deterministic>True</Deterministic>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<PackageProjectUrl>https://github.com/managed-midi/managed-midi</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/managed-midi/managed-midi</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>ManagedMidi aims to provide C#/.NET API For almost-raw access to MIDI devices in cross-platform manner with the greatest common measure so that it can be "commons" either on Mono or .NET, everywhere, as well as standard MIDI file manipulation and player functionality.</Description>
+		<Copyright>(C) 2010-2026, Atsushi Eno and contributors</Copyright>
 	</PropertyGroup>
 </Project>
