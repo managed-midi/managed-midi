@@ -67,11 +67,6 @@ public class MidiAccessExtensionManager
     public virtual T GetInstance<T>() where T : class => null;
 }
 
-public class MidiConnectionStateDetectorExtension
-{
-    public event EventHandler<MidiConnectionEventArgs> StateChanged;
-}
-
 public abstract class MidiPortCreatorExtension
 {
     public abstract IMidiOutput CreateVirtualInputSender(PortCreatorContext context);
@@ -128,7 +123,11 @@ public class SimpleVirtualMidiInput : SimpleVirtualMidiPort, IMidiInput
     {
     }
 
-    public event EventHandler<MidiReceivedEventArgs> MessageReceived;
+    event EventHandler<MidiReceivedEventArgs> IMidiInput.MessageReceived
+    {
+        add { }
+        remove { }
+    }
 }
 
 public class SimpleVirtualMidiOutput : SimpleVirtualMidiPort, IMidiOutput
