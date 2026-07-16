@@ -162,9 +162,13 @@ Options:
                     if (line == "P")
                     {
                         if (player.State == PlayerState.Playing)
-                            player.PauseAsync();
+                        {
+                            player.Pause();
+                        }
                         else
-                            player.PlayAsync();
+                        {
+                            player.Play();
+                        }
                     }
                     else if (line == "")
                     {
@@ -180,13 +184,12 @@ Options:
                 }
             }).Start();
 
-            //player.StartLoop ();
-            player.PlayAsync();
+            player.Play();
             while (loop)
             {
                 wh.WaitOne();
             }
-            player.PauseAsync();
+            player.Pause();
         }
         return 0;
     }

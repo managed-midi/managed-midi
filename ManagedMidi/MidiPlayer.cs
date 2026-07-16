@@ -336,15 +336,6 @@ public class MidiPlayer : IDisposable
             output.Dispose();
     }
 
-    [Obsolete("This should not be callable externally. It will be removed in the next API-breaking update.")]
-    public void StartLoop()
-    {
-        sync_player_task = Task.Run(() => { player.PlayerLoop(); });
-    }
-
-    [Obsolete("Its naming is misleading. It starts playing asynchronously, but won't return any results unlike typical async API. Use new Play() method instead")]
-    public void PlayAsync() => Play();
-
     public void Play()
     {
         switch (State)
@@ -356,16 +347,13 @@ public class MidiPlayer : IDisposable
                 return;
             case PlayerState.Stopped:
                 if (sync_player_task == null || sync_player_task.Status != TaskStatus.Running)
-#pragma warning disable 618
-                    StartLoop();
-#pragma warning restore 618
+                {
+                    sync_player_task = Task.Run(player.PlayerLoop);
+                }
                 player.Play();
                 return;
         }
     }
-
-    [Obsolete("Its naming is misleading. It starts playing asynchronously, but won't return any results unlike typical async API. Use new Pause() method instead")]
-    public void PauseAsync() => Pause();
 
     public void Pause()
     {
@@ -389,9 +377,6 @@ public class MidiPlayer : IDisposable
                 break;
         }
     }
-
-    [Obsolete("Its naming is misleading. It starts seeking asynchronously, but won't return any results unlike typical async API. Use new Seek() method instead")]
-    public void SeekAsync(int ticks) => Seek(ticks);
 
     public void Seek(int ticks)
     {
