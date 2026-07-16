@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ManagedMidi.WinMM;
 
 internal class WinMMMidiAccess : IMidiAccess
 {
+    public MidiAccessExtensionManager ExtensionManager { get; } = new();
+
     public IEnumerable<IMidiPortDetails> Inputs
     {
         get
@@ -40,8 +36,6 @@ internal class WinMMMidiAccess : IMidiAccess
             }
         }
     }
-
-    public event EventHandler<MidiConnectionEventArgs> StateChanged;
 
     public Task<IMidiInput> OpenInputAsync(string portId)
     {

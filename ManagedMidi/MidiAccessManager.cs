@@ -48,7 +48,6 @@ public static class MidiAccessManager
     }
 }
 
-[Obsolete("There will be breaking change in this interface in the next API-breaking release. If you want to avoid API breakage, use IMidiAccess2 now. It will become identical to IMidiAccess2 and IMidiAccess2 will remain for a while.")]
 public interface IMidiAccess
 {
     IEnumerable<IMidiPortDetails> Inputs { get; }
@@ -56,17 +55,10 @@ public interface IMidiAccess
 
     Task<IMidiInput> OpenInputAsync(string portId);
     Task<IMidiOutput> OpenOutputAsync(string portId);
-    [Obsolete("This will be removed in the next API-breaking change. It is not functional at this state anyways.")]
-    event EventHandler<MidiConnectionEventArgs> StateChanged;
+    MidiAccessExtensionManager ExtensionManager { get; }
 }
 
 #region draft API
-
-// In the future we could use default interface members, but we should target earlier frameworks in the meantime.
-public interface IMidiAccess2 : IMidiAccess
-{
-    MidiAccessExtensionManager ExtensionManager { get; }
-}
 
 public class MidiAccessExtensionManager
 {
@@ -214,6 +206,8 @@ class EmptyMidiAccess : IMidiAccess
         get { yield return EmptyMidiOutput.Instance.Details; }
     }
 
+    public MidiAccessExtensionManager ExtensionManager { get; } = new();
+
     public Task<IMidiInput> OpenInputAsync(string portId)
     {
         if (portId != EmptyMidiInput.Instance.Details.Id)
@@ -227,11 +221,6 @@ class EmptyMidiAccess : IMidiAccess
             throw new ArgumentException(string.Format("Port ID {0} does not exist.", portId));
         return Task.FromResult<IMidiOutput>(EmptyMidiOutput.Instance);
     }
-
-#pragma warning disable 0067
-    // it will never be fired.
-    public event EventHandler<MidiConnectionEventArgs> StateChanged;
-#pragma warning restore 0067
 }
 
 abstract class EmptyMidiPort : IMidiPort

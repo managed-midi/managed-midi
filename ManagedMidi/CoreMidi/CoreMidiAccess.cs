@@ -1,29 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-
-#if !__IOS__ && !__MACOS__
-using nint = System.Int64;
-#endif
-
-#if __IOS__ || __MACOS__
-namespace ManagedMidi
-{
-	public partial class MidiAccessManager
-	{
-		partial void InitializeDefault ()
-		{
-			Default = new CoreMidiApi.CoreMidiAccess ();
-		}
-	}
-}
-#endif
+﻿using System.Runtime.InteropServices;
 
 namespace ManagedMidi.CoreMidi;
 
-internal class CoreMidiAccess : IMidiAccess2
+internal class CoreMidiAccess : IMidiAccess
 {
     class CoreMidiAccessExtensionManager : MidiAccessExtensionManager
     {
@@ -70,8 +49,6 @@ internal class CoreMidiAccess : IMidiAccess2
     public IEnumerable<IMidiPortDetails> Inputs => Enumerable.Range(0, (int) Midi.SourceCount).Select(i => (IMidiPortDetails) new CoreMidiPortDetails(MidiEndpoint.GetSource(i)));
 
     public IEnumerable<IMidiPortDetails> Outputs => Enumerable.Range(0, (int) Midi.DestinationCount).Select(i => (IMidiPortDetails) new CoreMidiPortDetails(MidiEndpoint.GetDestination(i)));
-
-    public event EventHandler<MidiConnectionEventArgs> StateChanged;
 
     public Task<IMidiInput> OpenInputAsync(string portId)
     {

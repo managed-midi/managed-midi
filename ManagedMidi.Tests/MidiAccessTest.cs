@@ -50,12 +50,7 @@ public class MidiAccessTest
     [Test]
     public void MidiPortCreatorExtension()
     {
-        var a2 = MidiAccessManager.Default as IMidiAccess2;
-        if (a2 == null)
-        {
-            Assert.Warn("not testable");
-            return; // not testable
-        }
+        var a2 = MidiAccessManager.Default;
         var pc = a2.ExtensionManager.GetInstance<MidiPortCreatorExtension>();
         var sender = pc.CreateVirtualInputSender(new MidiPortCreatorExtension.PortCreatorContext());
         sender.Send(new byte[] { 0x90, 0x60, 0x70 }, 0, 3, 0);
