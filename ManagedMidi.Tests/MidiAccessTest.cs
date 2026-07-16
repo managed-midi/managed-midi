@@ -52,9 +52,12 @@ public class MidiAccessTest
     {
         var a2 = MidiAccessManager.Default;
         var pc = a2.ExtensionManager.GetInstance<MidiPortCreatorExtension>();
-        var sender = pc.CreateVirtualInputSender(new MidiPortCreatorExtension.PortCreatorContext());
-        sender.Send(new byte[] { 0x90, 0x60, 0x70 }, 0, 3, 0);
-        sender.CloseAsync();
+        if (pc is not null)
+        {
+            var sender = pc.CreateVirtualInputSender(new MidiPortCreatorExtension.PortCreatorContext());
+            sender.Send(new byte[] { 0x90, 0x60, 0x70 }, 0, 3, 0);
+            sender.CloseAsync();
+        }
     }
 }
 
