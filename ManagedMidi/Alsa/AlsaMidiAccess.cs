@@ -155,7 +155,6 @@ internal class AlsaMidiAccess : IMidiAccess
     }
 }
 
-[Obsolete("It will vanish from public API surface")]
 internal class AlsaMidiPortDetails : IMidiPortDetails
 {
     AlsaPortInfo port;
@@ -176,7 +175,6 @@ internal class AlsaMidiPortDetails : IMidiPortDetails
     public string Version => port.Version;
 }
 
-[Obsolete("It will vanish from public API surface")]
 internal class AlsaMidiInput : IMidiInput
 {
     AlsaSequencer seq;
@@ -219,7 +217,6 @@ internal class AlsaMidiInput : IMidiInput
     }
 }
 
-[Obsolete("It will vanish from public API surface")]
 internal class AlsaMidiOutput : IMidiOutput
 {
     AlsaSequencer seq;

@@ -120,21 +120,10 @@ public class MidiTrack
     {
         if (messages == null)
             throw new ArgumentNullException("messages");
-        this.messages = messages as List<MidiMessage> ?? new List<MidiMessage>(messages);
+        Messages = messages as List<MidiMessage> ?? new List<MidiMessage>(messages);
     }
 
-    List<MidiMessage> messages;
-
-    [Obsolete("No need to use this method, simply use Messages.Add")]
-    public void AddMessage(MidiMessage msg)
-    {
-        messages.Add(msg);
-    }
-
-    public IList<MidiMessage> Messages
-    {
-        get { return messages; }
-    }
+    public IList<MidiMessage> Messages { get; }
 }
 
 public struct MidiMessage
@@ -266,9 +255,6 @@ public static class MidiMetaType
 
     public const int DefaultTempo = 500000;
 
-    [Obsolete("Use another GetTempo overload with offset and length arguments instead.")]
-    public static int GetTempo(byte[] data) => GetTempo(data, 0);
-
     public static int GetTempo(byte[] data, int offset)
     {
         if (data == null)
@@ -277,9 +263,6 @@ public static class MidiMetaType
             throw new ArgumentException($"offset + 2 must be a valid size under data length of array size {data.Length}; {offset} is not.");
         return (data[offset] << 16) + (data[offset + 1] << 8) + data[offset + 2];
     }
-
-    [Obsolete("Use another GetBpm() overload with offset argument instead")]
-    public static double GetBpm(byte[] data) => GetBpm(data, 0);
 
     public static double GetBpm(byte[] data, int offset)
     {
@@ -360,37 +343,20 @@ public struct MidiEvent
     public MidiEvent(int value)
     {
         Value = value;
-#pragma warning disable 618
-        Data = null;
-#pragma warning restore
         ExtraData = null;
         ExtraDataOffset = 0;
         ExtraDataLength = 0;
     }
 
-    [Obsolete("Use another constructor overload with Span<byte> instead")]
-    public MidiEvent(byte type, byte arg1, byte arg2, byte[] data)
-        : this(type, arg1, arg2, data, 0, data != null ? data.Length : 0)
-    {
-    }
-
     public MidiEvent(byte type, byte arg1, byte arg2, byte[] extraData, int extraDataOffset, int extraDataLength)
     {
         Value = type + (arg1 << 8) + (arg2 << 16);
-#pragma warning disable 618
-        Data = extraData;
-#pragma warning restore
         ExtraData = extraData;
         ExtraDataOffset = extraDataOffset;
         ExtraDataLength = extraDataLength;
-
     }
 
     public readonly int Value;
-
-    // This expects EndSysEx byte _inclusive_ for F0 message.
-    [Obsolete("Use ExtraData with ExtraDataOffset and ExtraDataLength instead.")]
-    public readonly byte[] Data;
 
     public readonly byte[] ExtraData;
 
