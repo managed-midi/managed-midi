@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ManagedMidi.AlsaSharp;
 
 namespace ManagedMidi.Alsa;
 
-internal class AlsaMidiAccess : IMidiAccess2
+internal class AlsaMidiAccess : IMidiAccess
 {
     internal class AlsaMidiAccessExtensionManager : MidiAccessExtensionManager
     {
@@ -138,8 +133,6 @@ internal class AlsaMidiAccess : IMidiAccess2
     public IEnumerable<IMidiPortDetails> Inputs => EnumerateAvailableInputPorts().Select(p => new AlsaMidiPortDetails(p));
 
     public IEnumerable<IMidiPortDetails> Outputs => EnumerateAvailableOutputPorts().Select(p => new AlsaMidiPortDetails(p));
-
-    public event EventHandler<MidiConnectionEventArgs> StateChanged;
 
     public Task<IMidiInput> OpenInputAsync(string portId)
     {
