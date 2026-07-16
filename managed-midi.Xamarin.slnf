@@ -1,9 +1,0 @@
-{
-  "solution": {
-    "path": "managed-midi.sln",
-    "projects": [
-      "Commons.Music.Midi\\Commons.Music.Midi.csproj",
-      "Commons.Music.Midi.Shared\\Commons.Music.Midi.Shared.shproj"
-    ]
-  }
-}
