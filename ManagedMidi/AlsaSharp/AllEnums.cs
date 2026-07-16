@@ -1,5 +1,3 @@
-using System;
-
 namespace ManagedMidi.AlsaSharp;
 
 internal enum AlsaIOType

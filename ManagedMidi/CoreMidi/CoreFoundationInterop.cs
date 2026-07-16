@@ -1,9 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using CFStringRef = System.IntPtr;
-
+﻿using System.Runtime.InteropServices;
 using CFAllocatorRef = System.IntPtr;
 using CFStringEncoding = System.Int32;
+using CFStringRef = System.IntPtr;
 using CFTypeRef = System.IntPtr;
 
 namespace ManagedMidi.CoreMidi;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ManagedMidi.AlsaSharp;
+﻿namespace ManagedMidi.AlsaSharp;
 
 internal class AlsaSystemInfo : IDisposable
 {
