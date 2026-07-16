@@ -178,8 +178,8 @@ internal class CoreMidiOutput : IMidiOutput
         port.Dispose();
         client.Dispose();
         details.Dispose();
-        return Task.CompletedTask;
         Connection = MidiPortConnectionState.Closed;
+        return Task.CompletedTask;
     }
 
     public void Dispose()
