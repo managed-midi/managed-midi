@@ -180,8 +180,9 @@ internal class MidiEndpoint : IDisposable
     void SetStringProp(IntPtr id, string value)
     {
         if (id == IntPtr.Zero)
+        {
             return;
-        CFStringRef str;
+        }
         CoreMidiInterop.MIDIObjectSetStringProperty(Handle, id, Midi.CreateCFStringRef(value));
     }
 
