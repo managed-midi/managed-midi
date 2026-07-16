@@ -1,3 +1,5 @@
+using ManagedMidi.Smf;
+
 namespace ManagedMidi.ConsolePlayer;
 
 public class Program

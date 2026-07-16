@@ -1,3 +1,5 @@
+using ManagedMidi.Smf;
+
 namespace ManagedMidi;
 
 public enum PlayerState

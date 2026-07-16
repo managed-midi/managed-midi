@@ -1,4 +1,6 @@
-﻿namespace ManagedMidi.Tests;
+﻿using ManagedMidi.Smf;
+
+namespace ManagedMidi.Tests;
 
 [TestFixture]
 public class MidiPlayerTest
