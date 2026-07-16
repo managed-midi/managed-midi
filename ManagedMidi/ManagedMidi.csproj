@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<!--
-		  - netstandard2.0 is present for the sake of other platform-neutral libraries
-		  - that want to depend on ManagedMidi, but the assembly contains no implementation
-		  - for IMidiAccess. The assembly with default implementations depends on the
-		  - target platform of the eventual running application.
+		  - Currently, netstandard2.0 is the only target as all IMidiAccess implementations
+		  - use interop. We will add targets with different references if and when we need to.
 		  -->
-		<TargetFrameworks>netstandard2.0;net10.0;net472</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<LangVersion>latest</LangVersion>
