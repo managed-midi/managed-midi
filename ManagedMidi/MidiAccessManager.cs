@@ -1,26 +1,51 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace ManagedMidi;
 
-public partial class MidiAccessManager
+/// <summary>
+/// Static class providing access to default (platform-specific) and empty implementations of <see cref="IMidiAccess"/>.
+/// </summary>
+public static class MidiAccessManager
 {
-    static MidiAccessManager()
+    public static IMidiAccess Default => DefaultImpl.Default;
+    public static IMidiAccess Empty { get; } = new EmptyMidiAccess();
+
+    private static class DefaultImpl
     {
-        Default = Empty = new EmptyMidiAccess();
-        new MidiAccessManager().InitializeDefault();
+        internal static IMidiAccess Default { get; } =
+            Environment.OSVersion.Platform != PlatformID.Unix ? (IMidiAccess) new WinMM.WinMMMidiAccess()
+            : IsRunningOnMac() ? (IMidiAccess) new CoreMidi.CoreMidiAccess()
+            : new Alsa.AlsaMidiAccess();
+
+        //From Managed.Windows.Forms/XplatUI
+        [DllImport("libc")]
+        static extern int uname(IntPtr buf);
+
+        static bool IsRunningOnMac()
+        {
+            IntPtr buf = IntPtr.Zero;
+            try
+            {
+                buf = Marshal.AllocHGlobal(8192);
+                // This is a hacktastic way of getting sysname from uname ()
+                if (uname(buf) == 0)
+                {
+                    string os = Marshal.PtrToStringAnsi(buf);
+                    if (os == "Darwin")
+                        return true;
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (buf != IntPtr.Zero)
+                    Marshal.FreeHGlobal(buf);
+            }
+            return false;
+        }
     }
-
-    private MidiAccessManager()
-    {
-        // We need this only for that we want to use partial method!
-    }
-
-    public static IMidiAccess Default { get; private set; }
-    public static IMidiAccess Empty { get; internal set; }
-
-    partial void InitializeDefault();
 }
 
 [Obsolete("There will be breaking change in this interface in the next API-breaking release. If you want to avoid API breakage, use IMidiAccess2 now. It will become identical to IMidiAccess2 and IMidiAccess2 will remain for a while.")]
