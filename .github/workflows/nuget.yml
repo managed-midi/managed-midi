@@ -28,5 +28,5 @@ jobs:
 
       - name: Push to NuGet 
         run: |
-          dotnet pack -c Release -o $PWD/nuget ManagedMidi
-          dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} nuget/*.nupkg
+          dotnet pack -c Release -o ./nuget ManagedMidi
+          dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} nuget\*.nupkg
