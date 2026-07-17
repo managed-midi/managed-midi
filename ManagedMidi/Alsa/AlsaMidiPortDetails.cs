@@ -4,7 +4,7 @@ namespace ManagedMidi.Alsa;
 
 internal class AlsaMidiPortDetails : IMidiPortDetails
 {
-    AlsaPortInfo port;
+    private readonly AlsaPortInfo port;
 
     internal AlsaMidiPortDetails(AlsaPortInfo port)
     {
@@ -12,14 +12,8 @@ internal class AlsaMidiPortDetails : IMidiPortDetails
     }
 
     internal AlsaPortInfo PortInfo => port;
-
     public string Id => port.Id;
-
     public string Manufacturer => port.Manufacturer;
-
     public string Name => port.Name;
-
     public string Version => port.Version;
 }
-
-
