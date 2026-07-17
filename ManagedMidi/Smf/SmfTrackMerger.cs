@@ -1,28 +1,29 @@
 namespace ManagedMidi.Smf;
 
-public class SmfTrackMerger
+// TODO: Refactor this to a single static method.
+internal class SmfTrackMerger
 {
-    public static MidiMusic Merge(MidiMusic source)
-    {
-        return new SmfTrackMerger(source).GetMergedMessages();
-    }
+    private readonly MidiMusic source;
 
-    SmfTrackMerger(MidiMusic source)
+    private SmfTrackMerger(MidiMusic source)
     {
         this.source = source;
     }
 
-    MidiMusic source;
+    public static MidiMusic Merge(MidiMusic source) =>
+        new SmfTrackMerger(source).GetMergedMessages();
 
     // FIXME: it should rather be implemented to iterate all
     // tracks with index to messages, pick the track which contains
     // the nearest event and push the events into the merged queue.
     // It's simpler, and costs less by removing sort operation
     // over thousands of events.
-    MidiMusic GetMergedMessages()
+    private MidiMusic GetMergedMessages()
     {
         if (source.Format == 0)
+        {
             return source;
+        }
 
         IList<MidiMessage> l = new List<MidiMessage>();
 
@@ -37,7 +38,9 @@ public class SmfTrackMerger
         }
 
         if (l.Count == 0)
+        {
             return new MidiMusic() { DeltaTimeSpec = source.DeltaTimeSpec }; // empty (why did you need to sort your song file?)
+        }
 
         // Usual Sort() over simple list of MIDI events does not work as expected.
         // For example, it does not always preserve event 
@@ -72,8 +75,12 @@ public class SmfTrackMerger
         var l2 = new List<MidiMessage>(l.Count);
         int idx;
         for (int i = 0; i < idxl.Count; i++)
+        {
             for (idx = idxl[i], prev = l[idx].DeltaTime; idx < l.Count && l[idx].DeltaTime == prev; idx++)
+            {
                 l2.Add(l[idx]);
+            }
+        }
         l = l2;
 
         // now messages should be sorted correctly.
@@ -90,10 +97,11 @@ public class SmfTrackMerger
         }
         l[l.Count - 1] = new MidiMessage(waitToNext, l[l.Count - 1].Event);
 
-        var m = new MidiMusic();
-        m.DeltaTimeSpec = source.DeltaTimeSpec;
-        m.Format = 0;
-        m.Tracks.Add(new MidiTrack(l));
-        return m;
+        return new MidiMusic
+        {
+            DeltaTimeSpec = source.DeltaTimeSpec,
+            Format = 0,
+            Tracks = { new MidiTrack(l) }
+        };
     }
 }
