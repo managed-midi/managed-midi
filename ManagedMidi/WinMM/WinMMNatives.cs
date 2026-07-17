@@ -149,24 +149,20 @@ internal static class WinMMNatives
     internal static string GetMidiOutErrorText(int code, int maxLength = 128)
     {
         StringBuilder errorMsg = new StringBuilder(maxLength);
-
         if (midiOutGetErrorText(code, errorMsg, maxLength) == 0)
         {
             return errorMsg.ToString();
         }
-
         return "Unknown winmm midi output error";
     }
 
     internal static string GetMidiInErrorText(int code, int maxLength = 128)
     {
         StringBuilder errorMsg = new StringBuilder(maxLength);
-
         if (midiInGetErrorText(code, errorMsg, maxLength) == 0)
         {
             return errorMsg.ToString();
         }
-
         return "Unknown winmm midi input error";
     }
 }

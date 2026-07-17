@@ -2,18 +2,15 @@
 
 class WinMMPortDetails : IMidiPortDetails
 {
+    public string Id { get; }
+    public string Manufacturer { get; }
+    public string Name { get; }
+    public string Version { get; }
+
     public WinMMPortDetails(uint deviceId, string name, int version)
     {
         Id = deviceId.ToString();
         Name = name;
         Version = version.ToString();
     }
-
-    public string Id { get; private set; }
-
-    public string Manufacturer { get; private set; }
-
-    public string Name { get; private set; }
-
-    public string Version { get; private set; }
 }
