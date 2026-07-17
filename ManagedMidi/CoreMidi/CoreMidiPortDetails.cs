@@ -19,18 +19,11 @@ internal class CoreMidiPortDetails : IMidiPortDetails, IDisposable
         }
     }
 
-    public MidiEndpoint Endpoint { get; set; }
+    public MidiEndpoint Endpoint { get; }
+    public string Id { get; }
+    public string Manufacturer { get; }
+    public string Name { get; }
+    public string Version { get; }
 
-    public string Id { get; set; }
-
-    public string Manufacturer { get; set; }
-
-    public string Name { get; set; }
-
-    public string Version { get; set; }
-
-    public void Dispose()
-    {
-        Endpoint?.Dispose();
-    }
+    public void Dispose() => Endpoint.Dispose();
 }

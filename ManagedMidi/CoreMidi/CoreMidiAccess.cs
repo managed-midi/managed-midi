@@ -1,21 +1,21 @@
-﻿using System.Runtime.InteropServices;
-
-namespace ManagedMidi.CoreMidi;
+﻿namespace ManagedMidi.CoreMidi;
 
 internal class CoreMidiAccess : IMidiAccess
 {
-    class CoreMidiAccessExtensionManager : MidiAccessExtensionManager
+    private class CoreMidiAccessExtensionManager : MidiAccessExtensionManager
     {
-        private CoreMidiPortCreatorExtension port_creator = new CoreMidiPortCreatorExtension();
+        private readonly CoreMidiPortCreatorExtension portCreator = new CoreMidiPortCreatorExtension();
         public override T GetInstance<T>()
         {
             if (typeof(T) == typeof(MidiPortCreatorExtension))
-                return (T) (object) port_creator;
+            {
+                return (T) (object) portCreator;
+            }
             return null;
         }
     }
 
-    class CoreMidiPortCreatorExtension : MidiPortCreatorExtension
+    private class CoreMidiPortCreatorExtension : MidiPortCreatorExtension
     {
         public override IMidiOutput CreateVirtualInputSender(PortCreatorContext context)
         {
@@ -46,15 +46,17 @@ internal class CoreMidiAccess : IMidiAccess
 
     public MidiAccessExtensionManager ExtensionManager { get; } = new CoreMidiAccessExtensionManager();
 
-    public IEnumerable<IMidiPortDetails> Inputs => Enumerable.Range(0, (int) Midi.SourceCount).Select(i => (IMidiPortDetails) new CoreMidiPortDetails(MidiEndpoint.GetSource(i)));
+    public IEnumerable<IMidiPortDetails> Inputs => Enumerable.Range(0, (int) Midi.SourceCount).Select(i => new CoreMidiPortDetails(MidiEndpoint.GetSource(i)));
 
-    public IEnumerable<IMidiPortDetails> Outputs => Enumerable.Range(0, (int) Midi.DestinationCount).Select(i => (IMidiPortDetails) new CoreMidiPortDetails(MidiEndpoint.GetDestination(i)));
+    public IEnumerable<IMidiPortDetails> Outputs => Enumerable.Range(0, (int) Midi.DestinationCount).Select(i => new CoreMidiPortDetails(MidiEndpoint.GetDestination(i)));
 
     public Task<IMidiInput> OpenInputAsync(string portId)
     {
         var details = Inputs.Cast<CoreMidiPortDetails>().FirstOrDefault(i => i.Id == portId);
         if (details == null)
-            throw new InvalidOperationException($"The device which is specified as port '{portId}' is not found.");
+        {
+            throw new InvalidOperationException($"Device specified as port '{portId}' is not found.");
+        }
         return Task.FromResult((IMidiInput) new CoreMidiInput(details));
     }
 
@@ -62,7 +64,9 @@ internal class CoreMidiAccess : IMidiAccess
     {
         var details = Outputs.Cast<CoreMidiPortDetails>().FirstOrDefault(i => i.Id == portId);
         if (details == null)
-            throw new InvalidOperationException($"Device specified as port {portId} is not found.");
+        {
+            throw new InvalidOperationException($"Device specified as port '{portId}' is not found.");
+        }
         return Task.FromResult((IMidiOutput) new CoreMidiOutput(details));
     }
 }
