@@ -31,7 +31,9 @@ internal class WinMMMidiAccess : IMidiAccess
                 MidiOutCaps caps;
                 var err = WinMMNatives.midiOutGetDevCaps((UIntPtr) i, out caps, (uint) Marshal.SizeOf<MidiOutCaps>());
                 if (err != 0)
+                {
                     throw new Win32Exception(err);
+                }
                 yield return new WinMMPortDetails(i, caps.Name, caps.DriverVersion);
             }
         }
@@ -41,7 +43,9 @@ internal class WinMMMidiAccess : IMidiAccess
     {
         var details = Inputs.FirstOrDefault(d => d.Id == portId);
         if (details == null)
+        {
             throw new InvalidOperationException($"The device with ID {portId} is not found.");
+        }
         return Task.FromResult((IMidiInput) new WinMMMidiInput(details));
     }
 
@@ -49,7 +53,9 @@ internal class WinMMMidiAccess : IMidiAccess
     {
         var details = Outputs.FirstOrDefault(d => d.Id == portId);
         if (details == null)
+        {
             throw new InvalidOperationException($"The device with ID {portId} is not found.");
+        }
         return Task.FromResult((IMidiOutput) new WinMMMidiOutput(details));
     }
 }

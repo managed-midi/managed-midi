@@ -5,6 +5,10 @@ namespace ManagedMidi.WinMM;
 
 class WinMMMidiOutput : IMidiOutput
 {
+    private readonly IntPtr handle;
+    public IMidiPortDetails Details { get; }
+    public MidiPortConnectionState Connection { get; private set; }
+
     public WinMMMidiOutput(IMidiPortDetails details)
     {
         Details = details;
@@ -12,29 +16,19 @@ class WinMMMidiOutput : IMidiOutput
         Connection = MidiPortConnectionState.Open;
     }
 
-    IntPtr handle;
-
-    public IMidiPortDetails Details { get; private set; }
-
-    public MidiPortConnectionState Connection { get; private set; }
-
-    public Task CloseAsync()
+    // TODO: Work out whether we really need to use Task.Run here.
+    public Task CloseAsync() => Task.Run(() =>
     {
-        return Task.Run(() =>
-        {
-            Connection = MidiPortConnectionState.Pending;
-            WinMMNatives.midiOutClose(handle);
-            Connection = MidiPortConnectionState.Closed;
-        });
-    }
+        Connection = MidiPortConnectionState.Pending;
+        WinMMNatives.midiOutClose(handle);
+        Connection = MidiPortConnectionState.Closed;
+    });
 
-    public void Dispose()
-    {
-        CloseAsync().Wait();
-    }
+    public void Dispose() => CloseAsync().Wait();
 
     public void Send(byte[] mevent, int offset, int length, long timestamp)
     {
+        // TODO: Fix the statefulness of MidiEvent.Convert used here.
         foreach (var evt in MidiEvent.Convert(mevent, offset, length))
         {
             if (evt.StatusByte < 0xF0 || evt.ExtraData == null)
@@ -70,13 +64,19 @@ class WinMMMidiOutput : IMidiOutput
                     // reclaim ownership and free
 
                     if (prepared)
+                    {
                         DieOnError(WinMMNatives.midiOutUnprepareHeader(handle, ptr, hdrSize));
+                    }
 
                     if (header.Data != IntPtr.Zero)
+                    {
                         Marshal.FreeHGlobal(header.Data);
+                    }
 
                     if (ptr != IntPtr.Zero)
+                    {
                         Marshal.FreeHGlobal(ptr);
+                    }
                 }
             }
         }
@@ -85,6 +85,8 @@ class WinMMMidiOutput : IMidiOutput
     static void DieOnError(int code)
     {
         if (code != 0)
+        {
             throw new Win32Exception(code, $"{WinMMNatives.GetMidiOutErrorText(code)} ({code})");
+        }
     }
 }

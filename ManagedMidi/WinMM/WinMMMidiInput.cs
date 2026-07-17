@@ -5,7 +5,17 @@ namespace ManagedMidi.WinMM;
 
 class WinMMMidiInput : IMidiInput
 {
-    MidiInProc midiInProc;
+    private const int LongBufferCount = 16;
+
+    private readonly Dictionary<IntPtr, LongMessageBuffer> lmBuffers = new Dictionary<IntPtr, LongMessageBuffer>();
+    private readonly IntPtr handle;
+    private readonly object lockObject = new object();
+
+    private readonly byte[] data1b = new byte[1];
+    private readonly byte[] data2b = new byte[2];
+    private readonly byte[] data3b = new byte[3];
+
+    private readonly MidiInProc midiInProc;
 
     public WinMMMidiInput(IMidiPortDetails details)
     {
@@ -19,7 +29,7 @@ class WinMMMidiInput : IMidiInput
 
         DieOnError(WinMMNatives.midiInStart(handle));
 
-        while (lmBuffers.Count < LONG_BUFFER_COUNT)
+        while (lmBuffers.Count < LongBufferCount)
         {
             var buffer = new LongMessageBuffer(handle);
 
@@ -32,18 +42,7 @@ class WinMMMidiInput : IMidiInput
         Connection = MidiPortConnectionState.Open;
     }
 
-    const int LONG_BUFFER_COUNT = 16;
-
-    Dictionary<IntPtr, LongMessageBuffer> lmBuffers = new Dictionary<IntPtr, LongMessageBuffer>();
-
-    IntPtr handle;
-    object lockObject = new object();
-
-    byte[] data1b = new byte[1];
-    byte[] data2b = new byte[2];
-    byte[] data3b = new byte[3];
-
-    void HandleData(IntPtr param1, IntPtr param2)
+    private void HandleData(IntPtr param1, IntPtr param2)
     {
         var status = (byte) ((int) param1 & 0xFF);
         var msb = (byte) (((int) param1 & 0xFF00) >> 8);
@@ -52,14 +51,18 @@ class WinMMMidiInput : IMidiInput
         var data = size == 1 ? data2b : size == 2 ? data3b : data1b;
         data[0] = status;
         if (data.Length >= 2)
+        {
             data[1] = msb;
+        }
         if (data.Length >= 3)
+        {
             data[2] = lsb;
+        }
 
         MessageReceived(this, new MidiReceivedEventArgs() { Data = data, Start = 0, Length = data.Length, Timestamp = (long) param2 });
     }
 
-    void HandleLongData(IntPtr param1, IntPtr param2)
+    private void HandleLongData(IntPtr param1, IntPtr param2)
     {
         byte[] data = null;
 
@@ -92,7 +95,9 @@ class WinMMMidiInput : IMidiInput
         }
 
         if (data != null && data.Length != 0)
+        {
             MessageReceived(this, new MidiReceivedEventArgs() { Data = data, Start = 0, Length = data.Length, Timestamp = (long) param2 });
+        }
     }
 
     void HandleMidiInProc(IntPtr midiIn, MidiInMessage msg, IntPtr instance, IntPtr param1, IntPtr param2)
@@ -165,7 +170,9 @@ class WinMMMidiInput : IMidiInput
                 lock (lockObject)
                 {
                     if (lmBuffers.Count < 1)
+                    {
                         break;
+                    }
                 }
 
                 Thread.Sleep(10);
@@ -175,26 +182,24 @@ class WinMMMidiInput : IMidiInput
         });
     }
 
-    public void Dispose()
-    {
-        CloseAsync().Wait();
-    }
+    public void Dispose() => CloseAsync().Wait();
 
     static void DieOnError(int code)
     {
         if (code != 0)
+        {
             throw new Win32Exception(code, $"{WinMMNatives.GetMidiInErrorText(code)} ({code})");
+        }
     }
 
-    class LongMessageBuffer : IDisposable
+    private class LongMessageBuffer : IDisposable
     {
+        private static readonly int MidiHdrSize = Marshal.SizeOf(typeof(MidiHdr));
+
         public IntPtr Ptr { get; set; } = IntPtr.Zero;
         public MidiHdr Header => (MidiHdr) Marshal.PtrToStructure(Ptr, typeof(MidiHdr));
-
-        IntPtr inputHandle;
-        static int midiHdrSize = Marshal.SizeOf(typeof(MidiHdr));
-
-        bool prepared = false;
+        private IntPtr inputHandle;
+        private bool prepared = false;
 
         public LongMessageBuffer(IntPtr inputHandle, int bufferSize = 4096)
         {
@@ -221,7 +226,9 @@ class WinMMMidiInput : IMidiInput
         public void PrepareHeader()
         {
             if (!prepared)
-                DieOnError(WinMMNatives.midiInPrepareHeader(inputHandle, Ptr, midiHdrSize));
+            {
+                DieOnError(WinMMNatives.midiInPrepareHeader(inputHandle, Ptr, MidiHdrSize));
+            }
 
             prepared = true;
         }
@@ -229,13 +236,15 @@ class WinMMMidiInput : IMidiInput
         public void UnPrepareHeader()
         {
             if (prepared)
-                DieOnError(WinMMNatives.midiInUnprepareHeader(inputHandle, Ptr, midiHdrSize));
+            {
+                DieOnError(WinMMNatives.midiInUnprepareHeader(inputHandle, Ptr, MidiHdrSize));
+            }
 
             prepared = false;
         }
 
         public void AddBuffer() =>
-            DieOnError(WinMMNatives.midiInAddBuffer(inputHandle, Ptr, midiHdrSize));
+            DieOnError(WinMMNatives.midiInAddBuffer(inputHandle, Ptr, MidiHdrSize));
 
         public void Dispose()
         {
