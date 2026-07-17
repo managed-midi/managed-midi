@@ -4,14 +4,15 @@ namespace ManagedMidi.Alsa;
 
 internal class AlsaMidiInput : IMidiInput
 {
-    AlsaSequencer seq;
-    AlsaMidiPortDetails port, source_port;
+    private readonly AlsaSequencer seq;
+    private readonly AlsaMidiPortDetails port;
+    private readonly AlsaMidiPortDetails sourcePort;
 
     internal AlsaMidiInput(AlsaSequencer seq, AlsaMidiPortDetails appPort, AlsaMidiPortDetails sourcePort)
     {
         this.seq = seq;
         port = appPort;
-        source_port = sourcePort;
+        this.sourcePort = sourcePort;
         byte[] buffer = new byte[0x200];
         seq.StartListening(port.PortInfo.Port, buffer, (buf, start, len) =>
         {
@@ -20,7 +21,7 @@ internal class AlsaMidiInput : IMidiInput
         });
     }
 
-    public IMidiPortDetails Details => source_port;
+    public IMidiPortDetails Details => sourcePort;
 
     public MidiPortConnectionState Connection { get; private set; }
 
@@ -39,7 +40,9 @@ internal class AlsaMidiInput : IMidiInput
         q.Address.Client = (byte) port.PortInfo.Client;
         q.Address.Port = (byte) port.PortInfo.Port;
         if (seq.QueryPortSubscribers(q))
+        {
             seq.DisconnectTo(port.PortInfo.Port, q.Address.Client, q.Address.Port);
+        }
         seq.DeleteSimplePort(port.PortInfo.Port);
     }
 }
