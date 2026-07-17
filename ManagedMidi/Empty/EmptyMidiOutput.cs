@@ -9,8 +9,6 @@ internal class EmptyMidiOutput : EmptyMidiPort, IMidiOutput
         // do nothing.
     }
 
-    internal override IMidiPortDetails CreateDetails()
-    {
-        return new EmptyMidiPortDetails("dummy_out", "Dummy MIDI Output");
-    }
+    internal override IMidiPortDetails CreateDetails() =>
+        new EmptyMidiPortDetails("dummy_out", "Dummy MIDI Output");
 }

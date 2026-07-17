@@ -9,8 +9,6 @@ internal class EmptyMidiInput : EmptyMidiPort, IMidiInput
     public event EventHandler<MidiReceivedEventArgs> MessageReceived;
 #pragma warning restore 0067
 
-    internal override IMidiPortDetails CreateDetails()
-    {
-        return new EmptyMidiPortDetails("dummy_in", "Dummy MIDI Input");
-    }
+    internal override IMidiPortDetails CreateDetails() =>
+        new EmptyMidiPortDetails("dummy_in", "Dummy MIDI Input");
 }
