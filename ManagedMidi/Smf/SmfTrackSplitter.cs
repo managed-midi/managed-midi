@@ -1,37 +1,38 @@
 namespace ManagedMidi.Smf;
 
-public class SmfTrackSplitter
+// TODO: Refactor this to a single static method (or similar).
+internal class SmfTrackSplitter
 {
-    public static MidiMusic Split(IList<MidiMessage> source, short deltaTimeSpec)
-    {
-        return new SmfTrackSplitter(source, deltaTimeSpec).Split();
-    }
+    private readonly IList<MidiMessage> source;
+    private readonly short deltaTimeSpec;
+    private readonly Dictionary<int, SplitTrack> tracks = new Dictionary<int, SplitTrack>();
 
-    SmfTrackSplitter(IList<MidiMessage> source, short deltaTimeSpec)
+    private SmfTrackSplitter(IList<MidiMessage> source, short deltaTimeSpec)
     {
         if (source == null)
+        {
             throw new ArgumentNullException("source");
+        }
         this.source = source;
-        delta_time_spec = deltaTimeSpec;
+        this.deltaTimeSpec = deltaTimeSpec;
         var mtr = new SplitTrack(-1);
         tracks.Add(-1, mtr);
     }
 
-    IList<MidiMessage> source;
-    short delta_time_spec;
-    Dictionary<int, SplitTrack> tracks = new Dictionary<int, SplitTrack>();
+    public static MidiMusic Split(IList<MidiMessage> source, short deltaTimeSpec) =>
+        new SmfTrackSplitter(source, deltaTimeSpec).Split();
 
-    class SplitTrack
+    private class SplitTrack
     {
+        public int TrackID { get; }
+        public int TotalDeltaTime { get; private set; }
+        public MidiTrack Track { get; }
+
         public SplitTrack(int trackID)
         {
             TrackID = trackID;
             Track = new MidiTrack();
         }
-
-        public int TrackID;
-        public int TotalDeltaTime;
-        public MidiTrack Track;
 
         public void AddMessage(int deltaInsertAt, MidiMessage e)
         {
@@ -41,7 +42,7 @@ public class SmfTrackSplitter
         }
     }
 
-    SplitTrack GetTrack(int track)
+    private SplitTrack GetTrack(int track)
     {
         SplitTrack t;
         if (!tracks.TryGetValue(track, out t))
@@ -78,10 +79,14 @@ public class SmfTrackSplitter
             GetTrack(id).AddMessage(totalDeltaTime, e);
         }
 
-        var m = new MidiMusic();
-        m.DeltaTimeSpec = delta_time_spec;
+        var m = new MidiMusic
+        {
+            DeltaTimeSpec = deltaTimeSpec
+        };
         foreach (var t in tracks.Values)
+        {
             m.Tracks.Add(t.Track);
+        }
         return m;
     }
 }

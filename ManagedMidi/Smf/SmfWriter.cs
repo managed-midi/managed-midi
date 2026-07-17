@@ -2,29 +2,29 @@ using System.Text;
 
 namespace ManagedMidi.Smf;
 
+// TODO: Maybe make this internal? (Create a WriteTo method in MidiMusic.)
 public class SmfWriter
 {
-    Stream stream;
+    private readonly Stream stream;
+    private Func<bool, MidiMessage, Stream, int> metaEventWriter;
 
     public SmfWriter(Stream stream)
     {
-        if (stream == null)
-            throw new ArgumentNullException("stream");
-        this.stream = stream;
+        this.stream = stream ?? throw new ArgumentNullException("stream");
 
         // default meta event writer.
-        meta_event_writer = SmfWriterExtension.DefaultMetaEventWriter;
+        metaEventWriter = SmfWriterExtension.DefaultMetaEventWriter;
     }
 
     public bool DisableRunningStatus { get; set; }
 
-    void WriteShort(short v)
+    private void WriteShort(short v)
     {
         stream.WriteByte((byte) (v / 0x100));
         stream.WriteByte((byte) (v % 0x100));
     }
 
-    void WriteInt(int v)
+    private void WriteInt(int v)
     {
         stream.WriteByte((byte) (v / 0x1000000));
         stream.WriteByte((byte) (v / 0x10000 & 0xFF));
@@ -36,7 +36,9 @@ public class SmfWriter
     {
         WriteHeader(music.Format, (short) music.Tracks.Count, music.DeltaTimeSpec);
         foreach (var track in music.Tracks)
+        {
             WriteTrack(track);
+        }
     }
 
     public void WriteHeader(short format, short tracks, short deltaTimeSpec)
@@ -49,16 +51,16 @@ public class SmfWriter
         WriteShort(deltaTimeSpec);
     }
 
-    Func<bool, MidiMessage, Stream, int> meta_event_writer;
-
     public Func<bool, MidiMessage, Stream, int> MetaEventWriter
     {
-        get { return meta_event_writer; }
+        get { return metaEventWriter; }
         set
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value");
-            meta_event_writer = value;
+            }
+            metaEventWriter = value;
         }
     }
 
@@ -75,7 +77,7 @@ public class SmfWriter
             switch (e.Event.EventType)
             {
                 case MidiEvent.Meta:
-                    meta_event_writer(false, e, stream);
+                    metaEventWriter(false, e, stream);
                     break;
                 case MidiEvent.SysEx1:
                 case MidiEvent.SysEx2:
@@ -98,19 +100,25 @@ public class SmfWriter
         }
     }
 
-    int GetVariantLength(int value)
+    private int GetVariantLength(int value)
     {
         if (value < 0)
+        {
             throw new ArgumentOutOfRangeException(string.Format("Length must be non-negative integer: {0}", value));
+        }
         if (value == 0)
+        {
             return 1;
+        }
         int ret = 0;
         for (int x = value; x != 0; x >>= 7)
+        {
             ret++;
+        }
         return ret;
     }
 
-    int GetTrackDataSize(MidiTrack track)
+    private int GetTrackDataSize(MidiTrack track)
     {
         int size = 0;
         byte running_status = 0;
@@ -123,7 +131,7 @@ public class SmfWriter
             switch (e.Event.EventType)
             {
                 case MidiEvent.Meta:
-                    size += meta_event_writer(true, e, null);
+                    size += metaEventWriter(true, e, null);
                     break;
                 case MidiEvent.SysEx1:
                 case MidiEvent.SysEx2:
@@ -144,12 +152,7 @@ public class SmfWriter
         return size;
     }
 
-    void Write7BitVariableInteger(int value)
-    {
-        Write7BitVariableInteger(value, false);
-    }
-
-    void Write7BitVariableInteger(int value, bool shifted)
+    private void Write7BitVariableInteger(int value, bool shifted = false)
     {
         if (value == 0)
         {
@@ -157,7 +160,9 @@ public class SmfWriter
             return;
         }
         if (value >= 0x80)
+        {
             Write7BitVariableInteger(value >> 7, true);
+        }
         stream.WriteByte((byte) ((value & 0x7F) + (shifted ? 0x80 : 0)));
     }
 }

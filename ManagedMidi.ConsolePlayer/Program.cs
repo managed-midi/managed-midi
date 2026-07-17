@@ -89,12 +89,12 @@ Options:
 
         foreach (var arg in files)
         {
-            var parser = new SmfReader();
+            MidiMusic music;
             using (var stream = File.OpenRead(arg))
             {
-                parser.Read(stream);
+                music = MidiMusic.Read(stream);
             }
-            var player = new MidiPlayer(parser.Music, api.OpenOutputAsync(output.Id).Result);
+            var player = new MidiPlayer(music, api.OpenOutputAsync(output.Id).Result);
             DateTimeOffset start = DateTimeOffset.Now;
             player.PlaybackCompletedToEnd += () =>
                 Console.WriteLine("Completed to end.");
