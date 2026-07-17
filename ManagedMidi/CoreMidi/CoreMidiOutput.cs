@@ -2,6 +2,11 @@
 
 internal class CoreMidiOutput : IMidiOutput
 {
+    private readonly MidiClient client;
+    private readonly CoreMidiPortDetails details;
+    private readonly MidiPort port;
+    private readonly MidiPacket[] sendBuffer = new MidiPacket[1];
+
     public CoreMidiOutput(CoreMidiPortDetails details)
     {
         this.details = details;
@@ -9,10 +14,6 @@ internal class CoreMidiOutput : IMidiOutput
         port = client.CreateOutputPort("outputport");
         Connection = MidiPortConnectionState.Open;
     }
-
-    MidiClient client;
-    CoreMidiPortDetails details;
-    MidiPort port;
 
     public IMidiPortDetails Details => details;
 
@@ -33,15 +34,14 @@ internal class CoreMidiOutput : IMidiOutput
         CloseAsync().Wait();
     }
 
-    MidiPacket[] arr = new MidiPacket[1];
     public void Send(byte[] mevent, int offset, int length, long timestamp)
     {
         unsafe
         {
             fixed (byte* ptr = mevent)
             {
-                arr[0] = new MidiPacket(timestamp, (ushort) length, (IntPtr) (ptr + offset));
-                port.Send(details.Endpoint, arr);
+                sendBuffer[0] = new MidiPacket(timestamp, (ushort) length, (IntPtr) (ptr + offset));
+                port.Send(details.Endpoint, sendBuffer);
             }
         }
     }

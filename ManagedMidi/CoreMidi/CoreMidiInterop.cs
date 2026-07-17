@@ -85,37 +85,34 @@ internal enum MidiError
 
 internal class MidiDevice
 {
+    private readonly IntPtr device;
+
     public MidiDevice(MIDIDeviceRef device)
     {
         this.device = device;
     }
 
-    IntPtr device;
-
     public nint EntityCount => CoreMidiInterop.MIDIDeviceGetNumberOfEntities(device);
-
-    public MidiEntity GetEntity(nint e)
-    {
-        return new MidiEntity(CoreMidiInterop.MIDIDeviceGetEntity(device, e));
-    }
+    public MidiEntity GetEntity(nint e) => new MidiEntity(CoreMidiInterop.MIDIDeviceGetEntity(device, e));
 }
 
 internal class MidiEntity
 {
+    private readonly MIDIEntityRef entity;
+
     public MidiEntity(MIDIEntityRef entity)
     {
         this.entity = entity;
     }
 
-    MIDIEntityRef entity;
-
     public nint Sources => CoreMidiInterop.MIDIEntityGetNumberOfSources(entity);
-
     public nint Destinations => CoreMidiInterop.MIDIEntityGetNumberOfDestinations(entity);
 }
 
 internal class MidiEndpoint : IDisposable
 {
+    private bool shouldDispose;
+    private ReadDispatcher dispatcher;
 
     public static MidiEndpoint GetSource(nint s)
     {
@@ -133,13 +130,10 @@ internal class MidiEndpoint : IDisposable
     public MidiEndpoint(MIDIEndpointRef endpoint, string endpointName, bool shouldDispose, ReadDispatcher dispatcher)
     {
         Handle = endpoint;
-        should_dispose = shouldDispose;
+        this.shouldDispose = shouldDispose;
         EndpointName = endpointName;
         this.dispatcher = dispatcher;
     }
-
-    bool should_dispose;
-    ReadDispatcher dispatcher;
 
     public MIDIEndpointRef Handle { get; private set; }
 
@@ -169,7 +163,7 @@ internal class MidiEndpoint : IDisposable
         set { SetIntegerProp(CoreMidiIntropWorkaround.kMIDIPropertyDriverVersion, value); }
     }
 
-    void SetStringProp(IntPtr id, string value)
+    private void SetStringProp(IntPtr id, string value)
     {
         if (id == IntPtr.Zero)
         {
@@ -178,7 +172,7 @@ internal class MidiEndpoint : IDisposable
         CoreMidiInterop.MIDIObjectSetStringProperty(Handle, id, Midi.CreateCFStringRef(value));
     }
 
-    String GetStringProp(IntPtr id)
+    private string GetStringProp(IntPtr id)
     {
         if (id == IntPtr.Zero)
         {
@@ -204,39 +198,38 @@ internal class MidiEndpoint : IDisposable
         }
     }
 
-    void SetIntegerProp(IntPtr id, int value)
-    {
-        CoreMidiInterop.MIDIObjectSetIntegerProperty(Handle, id, value);
-    }
+    private void SetIntegerProp(IntPtr id, int value) => CoreMidiInterop.MIDIObjectSetIntegerProperty(Handle, id, value);
 
-    int GetIntegerProp(IntPtr id)
+    private int GetIntegerProp(IntPtr id)
     {
-        int ret;
-        CoreMidiInterop.MIDIObjectGetIntegerProperty(Handle, id, out ret);
+        CoreMidiInterop.MIDIObjectGetIntegerProperty(Handle, id, out int ret);
         return ret;
     }
 
     public void Dispose()
     {
-        if (should_dispose)
+        if (shouldDispose)
         {
             dispatcher?.Dispose();
             dispatcher = null;
-            should_dispose = false;
+            shouldDispose = false;
         }
     }
 }
 
 internal class MidiPort : IDisposable
 {
+    private bool shouldDispose;
+    private ReadDispatcher dispatcher;
+    private int bufSize = 1024;
+    private IntPtr list;
+
     public MidiPort(MIDIPortRef port, bool shouldDispose, ReadDispatcher dispatcher)
     {
         Handle = port;
-        should_dispose = shouldDispose;
+        this.shouldDispose = shouldDispose;
         this.dispatcher = dispatcher;
     }
-    bool should_dispose;
-    ReadDispatcher dispatcher;
 
     public MIDIPortRef Handle { get; private set; }
 
@@ -268,12 +261,12 @@ internal class MidiPort : IDisposable
             list = IntPtr.Zero;
         }
 
-        if (should_dispose)
+        if (shouldDispose)
         {
             CoreMidiInterop.MIDIPortDispose(Handle);
             dispatcher?.Dispose();
             dispatcher = null;
-            should_dispose = false;
+            shouldDispose = false;
         }
     }
 
@@ -281,19 +274,17 @@ internal class MidiPort : IDisposable
 
     public void ConnectSource(MidiEndpoint endpoint) => CoreMidiInterop.MIDIPortConnectSource(Handle, endpoint.Handle, IntPtr.Zero);
 
-    int buf_size = 1024;
-    IntPtr list;
-
     public void Send(MidiEndpoint endpoint, MidiPacket[] arr)
     {
-
         var msize = Marshal.SizeOf<MIDIPacketNative>();
         var size = arr.Select(a => msize + a.Length).Sum();
-        if (list == IntPtr.Zero || size > buf_size)
+        if (list == IntPtr.Zero || size > bufSize)
         {
             if (list != IntPtr.Zero)
+            {
                 Marshal.FreeHGlobal(list);
-            list = Marshal.AllocHGlobal(buf_size);
+            }
+            list = Marshal.AllocHGlobal(bufSize);
         }
 
         var p = CoreMidiInterop.MIDIPacketListInit(list);
@@ -315,57 +306,53 @@ internal class MidiPacket
     }
 
     public int Length { get; private set; }
-
     public IntPtr Bytes { get; private set; }
     public long TimeStamp { get; internal set; }
 }
 
 internal class ReadDispatcher : IDisposable
 {
-    private static List<CoreMidiInterop.MIDIReadProc> read_procs = new List<CoreMidiInterop.MIDIReadProc>();
+    private static readonly List<CoreMidiInterop.MIDIReadProc> readProcs = new List<CoreMidiInterop.MIDIReadProc>();
 
     public MidiPort Port { get; set; }
-    internal CoreMidiInterop.MIDIReadProc DispatchProc;
+    internal CoreMidiInterop.MIDIReadProc DispatchProc { get; }
 
     public ReadDispatcher()
     {
-        DispatchProc = dispatchRead;
-
-        lock (read_procs)
+        DispatchProc = DispatchRead;
+        lock (readProcs)
         {
-            read_procs.Add(DispatchProc);
+            readProcs.Add(DispatchProc);
         }
     }
 
-    private void dispatchRead(MIDIPacketListPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
-    {
+    private void DispatchRead(MIDIPacketListPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon) =>
         Port.CallMessageReceived(pktlist, readProcRefCon, srcConnRefCon);
-    }
 
     public void Dispose()
     {
-        lock (read_procs)
+        lock (readProcs)
         {
-            read_procs.Remove(DispatchProc);
+            readProcs.Remove(DispatchProc);
         }
     }
 }
 
 internal class MidiClient : IDisposable
 {
+    private CFStringRef nameReference;
+
     public MidiClient(string name)
     {
         IntPtr h;
-        name_string = Midi.CreateCFStringRef(name);
-        int ret = CoreMidiInterop.MIDIClientCreate(name_string, null, IntPtr.Zero, out h);
+        nameReference = Midi.CreateCFStringRef(name);
+        int ret = CoreMidiInterop.MIDIClientCreate(nameReference, null, IntPtr.Zero, out h);
         if (ret != 0)
         {
             throw new MidiException($"Failed to create MIDI client for {name}: error code {ret}");
         }
         Handle = h;
     }
-
-    CFStringRef name_string;
 
     public MIDIClientRef Handle { get; private set; }
 
@@ -404,9 +391,11 @@ internal class MidiClient : IDisposable
     public void Dispose()
     {
         CoreMidiInterop.MIDIClientDispose(Handle);
-        if (name_string != IntPtr.Zero)
-            CoreFoundationInterop.CFRelease(name_string);
-        name_string = IntPtr.Zero;
+        if (nameReference != IntPtr.Zero)
+        {
+            CoreFoundationInterop.CFRelease(nameReference);
+        }
+        nameReference = IntPtr.Zero;
     }
 }
 

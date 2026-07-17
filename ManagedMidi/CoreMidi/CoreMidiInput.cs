@@ -4,6 +4,11 @@ namespace ManagedMidi.CoreMidi;
 
 internal class CoreMidiInput : IMidiInput
 {
+    private readonly CoreMidiPortDetails details;
+    private readonly MidiClient client;
+    private readonly MidiPort port;
+    private byte[] dispatchBytes = new byte[100];
+
     public CoreMidiInput(CoreMidiPortDetails details)
     {
         this.details = details;
@@ -13,29 +18,26 @@ internal class CoreMidiInput : IMidiInput
         port.MessageReceived += OnMessageReceived;
     }
 
-    CoreMidiPortDetails details;
-    MidiClient client;
-    MidiPort port;
-
     public IMidiPortDetails Details => details;
 
     public MidiPortConnectionState Connection => throw new NotImplementedException();
 
     public event EventHandler<MidiReceivedEventArgs> MessageReceived;
 
-    byte[] dispatch_bytes = new byte[100];
-
     void OnMessageReceived(object sender, MidiPacketsEventArgs e)
     {
-        if (MessageReceived != null)
+        if (MessageReceived is null)
         {
-            foreach (var p in e.Packets)
+            return;
+        }
+        foreach (var p in e.Packets)
+        {
+            if (dispatchBytes.Length < p.Length)
             {
-                if (dispatch_bytes.Length < p.Length)
-                    dispatch_bytes = new byte[p.Length];
-                Marshal.Copy(p.Bytes, dispatch_bytes, 0, p.Length);
-                MessageReceived(this, new MidiReceivedEventArgs() { Data = dispatch_bytes, Start = 0, Length = p.Length, Timestamp = p.TimeStamp });
+                dispatchBytes = new byte[p.Length];
             }
+            Marshal.Copy(p.Bytes, dispatchBytes, 0, p.Length);
+            MessageReceived(this, new MidiReceivedEventArgs() { Data = dispatchBytes, Start = 0, Length = p.Length, Timestamp = p.TimeStamp });
         }
     }
 
@@ -48,8 +50,5 @@ internal class CoreMidiInput : IMidiInput
         return Task.CompletedTask;
     }
 
-    public void Dispose()
-    {
-        CloseAsync().Wait();
-    }
+    public void Dispose() => CloseAsync().Wait();
 }
