@@ -2,17 +2,9 @@
 
 internal abstract class EmptyMidiPort : IMidiPort
 {
-    public IMidiPortDetails Details
-    {
-        get { return CreateDetails(); }
-    }
+    public IMidiPortDetails Details => CreateDetails();
     internal abstract IMidiPortDetails CreateDetails();
-
     public MidiPortConnectionState Connection { get; private set; }
-
     public Task CloseAsync() => Task.CompletedTask;
-
-    public void Dispose()
-    {
-    }
+    public void Dispose() { }
 }

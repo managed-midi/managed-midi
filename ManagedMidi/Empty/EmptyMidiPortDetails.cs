@@ -10,8 +10,8 @@ internal class EmptyMidiPortDetails : IMidiPortDetails
         Version = "0.0";
     }
 
-    public string Id { get; set; }
-    public string Manufacturer { get; set; }
-    public string Name { get; set; }
-    public string Version { get; set; }
+    public string Id { get; }
+    public string Manufacturer { get; }
+    public string Name { get; }
+    public string Version { get; }
 }
