@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace ManagedMidi.Smf;
 
 public class MidiMusic
