@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/Docs/">
+    <File Path="docs/history.md" />
+    <File Path="docs/migration.md" />
+    <File Path="README.md" />
+  </Folder>
   <Folder Name="/MSBuild/">
     <File Path="Directory.Packages.props" />
   </Folder>
