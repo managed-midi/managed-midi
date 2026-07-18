@@ -18,6 +18,8 @@ public class MidiMusic
         return r.Music;
     }
 
+    public void WriteTo(Stream stream) => new SmfWriter(stream).WriteMusic(this);
+
     public void AddTrack(MidiTrack track) => Tracks.Add(track);
 
 
