@@ -11,7 +11,7 @@ Many things are still to-do, including:
 
 The content below is from the original fork; this will be edited when more progress has been made.
 
-A [docs/migration.md](migration guide) exists, but is a work in progress.
+A [migration guide](docs/migration.md) exists, but is a work in progress.
 
 # managed-midi
 
