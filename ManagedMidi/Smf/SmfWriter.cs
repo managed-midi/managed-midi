@@ -2,8 +2,7 @@ using System.Text;
 
 namespace ManagedMidi.Smf;
 
-// TODO: Maybe make this internal? (Create a WriteTo method in MidiMusic.)
-public class SmfWriter
+internal class SmfWriter
 {
     private readonly Stream stream;
     private Func<bool, MidiMessage, Stream, int> metaEventWriter;
