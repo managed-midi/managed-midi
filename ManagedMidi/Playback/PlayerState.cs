@@ -1,4 +1,4 @@
-namespace ManagedMidi;
+namespace ManagedMidi.Playback;
 
 public enum PlayerState
 {
