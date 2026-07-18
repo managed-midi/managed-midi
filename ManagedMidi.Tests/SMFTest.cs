@@ -36,12 +36,13 @@ public class SMFTest
     [Test]
     public void MidiEventConvert()
     {
+        var converter = new MidiEventConverter();
         var bytes1 = new byte[] { 0xF8 };
-        var events1 = MidiEvent.Convert(bytes1, 0, bytes1.Length);
+        var events1 = converter.Convert(bytes1, 0, bytes1.Length);
         Assert.AreEqual(1, events1.Count(), "bytes1 count");
 
         var bytes2 = new byte[] { 0xFE };
-        var events2 = MidiEvent.Convert(bytes2, 0, bytes2.Length);
+        var events2 = converter.Convert(bytes2, 0, bytes2.Length);
         Assert.AreEqual(1, events2.Count(), "bytes2 count");
     }
 
@@ -109,8 +110,9 @@ public class SMFTest
     [Test]
     public void Convert()
     {
+        var converter = new MidiEventConverter();
         int[] bytes = { 0xF0, 0x0A, 0x41, 0x10, 0x42, 0x12, 0x40, 0, 0x7F, 0, 0x41, 0xF7 }; // am too lazy to add cast to byte...
-        var msgs = MidiEvent.Convert(bytes.Select(i => (byte) i).ToArray(), 0, bytes.Length);
+        var msgs = converter.Convert(bytes.Select(i => (byte) i).ToArray(), 0, bytes.Length);
         Assert.AreEqual(1, msgs.Count(), "message length");
         Assert.AreEqual(bytes.Length, msgs.First().ExtraDataLength);
     }

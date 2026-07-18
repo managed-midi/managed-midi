@@ -6,6 +6,7 @@ namespace ManagedMidi.WinMM;
 class WinMMMidiOutput : IMidiOutput
 {
     private readonly IntPtr handle;
+    private readonly MidiEventConverter eventConverter = new();
     public IMidiPortDetails Details { get; }
     public MidiPortConnectionState Connection { get; private set; }
 
@@ -28,8 +29,7 @@ class WinMMMidiOutput : IMidiOutput
 
     public void Send(byte[] mevent, int offset, int length, long timestamp)
     {
-        // TODO: Fix the statefulness of MidiEvent.Convert used here.
-        foreach (var evt in MidiEvent.Convert(mevent, offset, length))
+        foreach (var evt in eventConverter.Convert(mevent, offset, length))
         {
             if (evt.StatusByte < 0xF0 || evt.ExtraData == null)
             {
