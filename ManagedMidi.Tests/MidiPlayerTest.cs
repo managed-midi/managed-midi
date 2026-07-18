@@ -1,5 +1,4 @@
-﻿using ManagedMidi.Playback;
-using ManagedMidi.Smf;
+﻿using ManagedMidi.Smf;
 
 namespace ManagedMidi.Tests;
 

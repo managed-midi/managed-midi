@@ -1,6 +1,4 @@
-using ManagedMidi.Smf;
-
-namespace ManagedMidi.Playback;
+namespace ManagedMidi.Smf;
 
 // Event loop implementation.
 internal class MidiEventLooper : IDisposable

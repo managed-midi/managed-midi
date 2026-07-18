@@ -1,6 +1,4 @@
-using ManagedMidi.Smf;
-
-namespace ManagedMidi.Playback;
+namespace ManagedMidi.Smf;
 
 // Provides asynchronous player control.
 public class MidiPlayer : IDisposable

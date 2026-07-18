@@ -1,4 +1,4 @@
-namespace ManagedMidi.Playback;
+namespace ManagedMidi.Smf;
 
 public class VirtualMidiPlayerTimeManager : IMidiPlayerTimeManager, IDisposable
 {
