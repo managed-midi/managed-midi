@@ -1,18 +1,15 @@
 namespace ManagedMidi;
 
-public struct MidiMessage
+public readonly struct MidiMessage
 {
+    public readonly int DeltaTime;
+    public readonly MidiEvent Event;
+
     public MidiMessage(int deltaTime, MidiEvent evt)
     {
         DeltaTime = deltaTime;
         Event = evt;
     }
 
-    public readonly int DeltaTime;
-    public readonly MidiEvent Event;
-
-    public override string ToString()
-    {
-        return string.Format("[dt{0}]{1}", DeltaTime, Event);
-    }
+    public override string ToString() => $"[dt{DeltaTime}]{Event}";
 }
