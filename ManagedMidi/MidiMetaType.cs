@@ -23,14 +23,15 @@ public static class MidiMetaType
     public static int GetTempo(byte[] data, int offset)
     {
         if (data == null)
+        {
             throw new ArgumentNullException(nameof(data));
+        }
         if (offset < 0 || offset + 2 >= data.Length)
+        {
             throw new ArgumentException($"offset + 2 must be a valid size under data length of array size {data.Length}; {offset} is not.");
+        }
         return (data[offset] << 16) + (data[offset + 1] << 8) + data[offset + 2];
     }
 
-    public static double GetBpm(byte[] data, int offset)
-    {
-        return 60000000.0 / GetTempo(data, offset);
-    }
+    public static double GetBpm(byte[] data, int offset) => 60000000.0 / GetTempo(data, offset);
 }

@@ -1,4 +1,7 @@
+using ManagedMidi.Alsa;
+using ManagedMidi.CoreMidi;
 using ManagedMidi.Empty;
+using ManagedMidi.WinMM;
 using System.Runtime.InteropServices;
 
 namespace ManagedMidi;
@@ -11,12 +14,13 @@ public static class MidiAccessManager
     public static IMidiAccess Default => DefaultImpl.Default;
     public static IMidiAccess Empty { get; } = new EmptyMidiAccess();
 
+    // Separate class to achieve laziness in a simple thread-safe way.
     private static class DefaultImpl
     {
         internal static IMidiAccess Default { get; } =
-            Environment.OSVersion.Platform != PlatformID.Unix ? (IMidiAccess) new WinMM.WinMMMidiAccess()
-            : IsRunningOnMac() ? (IMidiAccess) new CoreMidi.CoreMidiAccess()
-            : new Alsa.AlsaMidiAccess();
+            Environment.OSVersion.Platform != PlatformID.Unix ? new WinMMMidiAccess()
+            : IsRunningOnMac() ? new CoreMidiAccess()
+            : new AlsaMidiAccess();
 
         //From Managed.Windows.Forms/XplatUI
         [DllImport("libc")]
@@ -33,7 +37,9 @@ public static class MidiAccessManager
                 {
                     string os = Marshal.PtrToStringAnsi(buf);
                     if (os == "Darwin")
+                    {
                         return true;
+                    }
                 }
             }
             catch
@@ -42,7 +48,9 @@ public static class MidiAccessManager
             finally
             {
                 if (buf != IntPtr.Zero)
+                {
                     Marshal.FreeHGlobal(buf);
+                }
             }
             return false;
         }

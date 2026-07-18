@@ -26,6 +26,11 @@ public struct MidiEvent
     public const byte EndSysEx = 0xF7;
     public const byte Meta = 0xFF;
 
+    public readonly int Value;
+    public readonly byte[] ExtraData;
+    public readonly int ExtraDataOffset;
+    public readonly int ExtraDataLength;
+
     // FIXME: This global state is not good...
     private static byte runningStatus;
 
@@ -47,9 +52,9 @@ public struct MidiEvent
                 {
                     var z = FixedDataSize(bytes[i]);
                     if (end < i + z)
-                        throw new Exception(string.Format(
-                            "Received data was incomplete to build MIDI status message for '{0:X}' status.",
-                            bytes[i]));
+                    {
+                        throw new Exception($"Received data was incomplete to build MIDI status message for '{bytes[i]:X}' status.");
+                    }
                     yield return new MidiEvent(bytes[i],
                         (byte) (z > 0 ? bytes[i + 1] : 0),
                         (byte) (z > 1 ? bytes[i + 2] : 0),
@@ -61,7 +66,9 @@ public struct MidiEvent
             {
                 var z = FixedDataSize(runningStatus);
                 if (end < i + z - 1)
+                {
                     throw new Exception($"Received data was incomplete to build MIDI running status message for '{runningStatus:X}' status.");
+                }
                 yield return new MidiEvent(runningStatus,
                     bytes[i],
                     (byte) (z > 1 ? bytes[i + 1] : 0),
@@ -87,75 +94,34 @@ public struct MidiEvent
         ExtraDataLength = extraDataLength;
     }
 
-    public readonly int Value;
-
-    public readonly byte[] ExtraData;
-
-    public readonly int ExtraDataOffset;
-
-    public readonly int ExtraDataLength;
-
-    public byte StatusByte
-    {
-        get { return (byte) (Value & 0xFF); }
-    }
+    public byte StatusByte => (byte) (Value & 0xFF);
 
     public byte EventType
     {
         get
         {
             var statusByte = StatusByte;
-            if (statusByte >= 0xF0)
-                return statusByte;
-            return (byte) (statusByte & 0xF0);
+            return statusByte >= 0xF0 ? statusByte : (byte) (statusByte & 0xF0);
         }
     }
 
-    public byte Msb
-    {
-        get { return (byte) ((Value & 0xFF00) >> 8); }
-    }
+    public byte Msb => (byte) ((Value & 0xFF00) >> 8);
+    public byte Lsb => (byte) ((Value & 0xFF0000) >> 16);
+    public byte MetaType => Msb;
+    public byte Channel => (byte) (Value & 0x0F);
 
-    public byte Lsb
+    public static byte FixedDataSize(byte statusByte) => (statusByte & 0xf0) switch
     {
-        get { return (byte) ((Value & 0xFF0000) >> 16); }
-    }
-
-    public byte MetaType
-    {
-        get { return Msb; }
-    }
-
-    public byte Channel
-    {
-        get { return (byte) (Value & 0x0F); }
-    }
-
-    public static byte FixedDataSize(byte statusByte)
-    {
-        switch (statusByte & 0xF0)
+        0xF0 => statusByte switch
         {
-            case 0xF0: // and 0xF7, 0xFF
-                switch (statusByte)
-                {
-                    case MtcQuarterFrame:
-                    case SongSelect:
-                        return 1;
-                    case SongPositionPointer:
-                        return 2;
-                    default:
-                        return 0; // no fixed data
-                }
-            case Program:
-            case CAf:
-                return 1;
-            default:
-                return 2;
-        }
-    }
+            MtcQuarterFrame or SongSelect => 1,
+            SongPositionPointer => 2,
+            _ => 0 // No fixed data
+        },
+        Program or CAf => 1,
+        _ => 2
+    };
 
-    public override string ToString()
-    {
-        return string.Format("{0:X02}:{1:X02}:{2:X02}{3}", StatusByte, Msb, Lsb, ExtraData != null ? "[data:" + ExtraDataLength + "]" : "");
-    }
+    public override string ToString() =>
+        $"{StatusByte:X02}:{Msb:X02}:{Lsb:X02}:{(ExtraData is not null ? $"[data:ExtraDataLength]" : "")}";
 }
