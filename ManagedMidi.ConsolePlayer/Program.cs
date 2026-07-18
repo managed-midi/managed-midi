@@ -1,3 +1,4 @@
+using ManagedMidi.Playback;
 using ManagedMidi.Smf;
 
 namespace ManagedMidi.ConsolePlayer;

@@ -1,4 +1,4 @@
-namespace ManagedMidi;
+namespace ManagedMidi.Playback;
 
 /// <summary>
 /// Used by MidiPlayer to manage time progress.
