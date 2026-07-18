@@ -11,6 +11,8 @@ Many things are still to-do, including:
 
 The content below is from the original fork; this will be edited when more progress has been made.
 
+A [docs/migration.md](migration guide) exists, but is a work in progress.
+
 # managed-midi
 
 managed-midi aims to provide C#/.NET API For almost-raw access to MIDI devices in cross-platform manner with the greatest common measure so that it can be "commons" either on Mono or .NET, everywhere, as well as standard MIDI file manipulation and player functionality.
