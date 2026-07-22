@@ -11,12 +11,7 @@ public class MidiMusic
         Format = 1;
     }
 
-    public static MidiMusic Read(Stream stream)
-    {
-        var r = new SmfReader();
-        r.Read(stream);
-        return r.Music;
-    }
+    public static MidiMusic Read(Stream stream) => SmfReader.ReadMusic(stream);
 
     public void WriteTo(Stream stream) => new SmfWriter(stream).WriteMusic(this);
 

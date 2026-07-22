@@ -95,7 +95,7 @@ public class SMFTest
             {
                 try
                 {
-                    new SmfReader().Read(stream);
+                    SmfReader.ReadMusic(stream);
                 }
                 catch
                 {
