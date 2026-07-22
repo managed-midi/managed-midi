@@ -1,35 +1,31 @@
 namespace ManagedMidi.Smf;
 
-// TODO: Refactor this to avoid state.
 internal class SmfReader
 {
     private Stream stream;
-    public MidiMusic Music { get; private set; }
     private int currentTrackSize;
     private byte runningStatus;
     private int peekByte = -1;
     private int streamPosition;
 
-    public void Read(Stream stream)
+    private SmfReader(Stream stream)
+    {
+        this.stream = stream;
+    }
+
+    internal static MidiMusic ReadMusic(Stream stream)
     {
         if (stream == null)
         {
             throw new ArgumentNullException(nameof(stream));
         }
-        this.stream = stream;
-        Music = new MidiMusic();
-        try
-        {
-            DoParse();
-        }
-        finally
-        {
-            this.stream = null;
-        }
+        var reader = new SmfReader(stream);
+        return reader.ReadMusic();
     }
 
-    private void DoParse()
+    private MidiMusic ReadMusic()
     {
+        var music = new MidiMusic();
         if (ReadByte() != 'M'
             || ReadByte() != 'T'
             || ReadByte() != 'h'
@@ -41,20 +37,21 @@ internal class SmfReader
         {
             throw ParseError("Unexpected data size (should be 6)");
         }
-        Music.Format = (byte) ReadInt16();
+        music.Format = (byte) ReadInt16();
         int tracks = ReadInt16();
-        Music.DeltaTimeSpec = ReadInt16();
+        music.DeltaTimeSpec = ReadInt16();
         try
         {
             for (int i = 0; i < tracks; i++)
             {
-                Music.Tracks.Add(ReadTrack());
+                music.Tracks.Add(ReadTrack());
             }
         }
         catch (FormatException ex)
         {
             throw ParseError("Unexpected data error", ex);
         }
+        return music;
     }
 
     private MidiTrack ReadTrack()
