@@ -56,7 +56,7 @@ stream (so should maintain the same state).
 ## Removed functionality
 
 A few types which were not used within the rest of the code have been removed for now.
-The most prominent of these are `GeneralMidi`, `MidiMachine` and `MidiModuleDatabase`.
+The most prominent of these are `GeneralMidi`, `MidiMachine`, `MidiModuleDatabase` and `SmfTrackSplitter`.
 
 These could be restored relatively easily, but may undergo a bit of API modernization if this happens.
 Please [file an issue](https://github.com/managed-midi/managed-midi/issues/new) if you use any of
