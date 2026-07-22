@@ -9,7 +9,7 @@
 		<Nullable>disable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<Version>1.0.0-alpha.1</Version>
+		<Version>1.0.0-alpha.2</Version>
 		<Deterministic>True</Deterministic>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 		<PackageProjectUrl>https://github.com/managed-midi/managed-midi</PackageProjectUrl>
