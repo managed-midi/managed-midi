@@ -4,8 +4,8 @@ namespace ManagedMidi.Smf;
 
 internal static class SmfWriterExtension
 {
-    public static Func<bool, MidiMessage, Stream, int> DefaultMetaEventWriter = WriteMetaEvent;
-    public static Func<bool, MidiMessage, Stream, int> VsqMetaTextSplitter = SplitVsqMetaText;
+    internal static Func<bool, MidiMessage, Stream, int> DefaultMetaEventWriter { get; } = WriteMetaEvent;
+    internal static Func<bool, MidiMessage, Stream, int> VsqMetaTextSplitter { get; } = SplitVsqMetaText;
 
     private static int WriteMetaEvent(bool lengthMode, MidiMessage e, Stream stream)
     {
