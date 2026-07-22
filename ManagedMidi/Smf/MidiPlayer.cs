@@ -94,7 +94,7 @@ public class MidiPlayer : IDisposable
         this.music = music;
         this.output = output;
 
-        messages = SmfTrackMerger.Merge(music).Tracks[0].Messages;
+        messages = music.GetMergedMessages().Tracks[0].Messages;
         looper = new MidiEventLooper(messages, timeManager, music.DeltaTimeSpec);
         looper.Starting += () =>
         {
