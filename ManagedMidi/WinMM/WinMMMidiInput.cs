@@ -100,7 +100,7 @@ class WinMMMidiInput : IMidiInput
         }
     }
 
-    void HandleMidiInProc(IntPtr midiIn, MidiInMessage msg, IntPtr instance, IntPtr param1, IntPtr param2)
+    private void HandleMidiInProc(IntPtr midiIn, MidiInMessage msg, IntPtr instance, IntPtr param1, IntPtr param2)
     {
         if (MessageReceived != null)
         {
@@ -138,7 +138,7 @@ class WinMMMidiInput : IMidiInput
         }
     }
 
-    void FreeBuffer(LongMessageBuffer buffer)
+    private void FreeBuffer(LongMessageBuffer buffer)
     {
         lmBuffers.Remove(buffer.Ptr);
         buffer.Dispose();
